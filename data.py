@@ -37,7 +37,7 @@ def collect_data(file):
     with open(file, "r") as file:
         results = json.load(file)
 
-        with sqlite.create_connection("data.db") as conn:
+        with sqlite.create_connection("data.sqlite") as conn:
             timestamp = datetime.now()
             print("Beginning data collection...")
 
@@ -78,14 +78,14 @@ def import_csv(dir):
     """
 
     instruments = []
-    with open("instruments_new.json", "r") as instruments_f:
+    with open("instruments.json", "r") as instruments_f:
         instruments = json.load(instruments_f)
 
     for instrument in instruments:
         filename = instrument["symbol"] + ".csv"
         if filename in os.listdir(dir):
             data = read_csv(instrument["symbol"], dir + '/' + filename)
-            with sqlite.create_connection("data.db") as conn:
+            with sqlite.create_connection("data.sqlite") as conn:
                 for d in data:
                     sqlite.insert(conn, instrument["id"], d[0], d[1], d[2])
 
@@ -102,7 +102,9 @@ def read_csv(symbol, path):
         data = stocks.get_historicals(symbol, span="year")
         for d in data:
             matches = [row for row in reader if row[0][1:] in d["begins_at"]]
-            final_data.append((matches[-1][0][1:], matches[-1][1].split(',')[1], float(d["close_price"])))
+            if len(matches) > 0:
+                final_data.append((matches[-1][0][1:], matches[-1][1].split(',')[1], float(d["close_price"])))
+            csvfile.seek(0)
         return final_data
 
 ######################################
@@ -118,7 +120,7 @@ def main():
         # Initialize database and collect instruments.
         if '0' in sys.argv[1]:
             print("Initiating database...")
-            init("data.db")
+            init("data.sqlite")
             print("Initialization complete.")
 
             print("Collecting instruments. Expected time: 2 hours 20 minutes")
@@ -132,8 +134,7 @@ def main():
             print("Data collection complete.")
 
     ######## TEST CODE ########
-    with open("test.json", "w") as file:
-        file.write(json.dumps(read_csv("TSLA", "popularity_export/TSLA.csv"),indent=4))
+
 
     ######## PUT CODE ABOVE ########
     
