@@ -462,14 +462,16 @@ def get_historicals(inputSymbols, span='week', bounds='regular'):
 
     histData = []
     for count, item in enumerate(data):
-        if (len(item['historicals']) == 0):
-            print(helper.error_ticker_does_not_exist(symbols[count]))
-            continue
-        stockSymbol = item['symbol']
-        for subitem in item['historicals']:
-            subitem['symbol'] = stockSymbol
-            histData.append(subitem)
-
+        try:
+            if (len(item['historicals']) == 0):
+                print(helper.error_ticker_does_not_exist(symbols[count]))
+                continue
+            stockSymbol = item['symbol']
+            for subitem in item['historicals']:
+                subitem['symbol'] = stockSymbol
+                histData.append(subitem)
+        except TypeError as e:
+            print("Failed to load historical data for", symbols[count])
     return(histData)
 
 

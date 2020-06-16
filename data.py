@@ -129,12 +129,11 @@ def main():
 
         # Collect price and popularity data.
         if '1' in sys.argv[1]:
-            print("Collecting data. Expected time: 20 minutes")
+            print("Collecting data. Expected time: 2 hours")
             collect_data("instruments.json")
             print("Data collection complete.")
 
     ######## TEST CODE ########
-
 
     ######## PUT CODE ABOVE ########
     
