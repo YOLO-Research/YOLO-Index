@@ -1,5 +1,45 @@
 [
     {
+        "symbol": "FSKR",
+        "id": "cd7beb96-04fe-4005-b8cb-430002731248"
+    },
+    {
+        "symbol": "PQDI",
+        "id": "5eba9df7-f73d-4181-8ceb-71179b0ab22b"
+    },
+    {
+        "symbol": "LGHL",
+        "id": "79c865ad-9da8-462f-ab5a-3cc909dd1c4a"
+    },
+    {
+        "symbol": "RPRX",
+        "id": "b8d075a9-dd75-4dd9-a838-2c32ef21690a"
+    },
+    {
+        "symbol": "FBRX",
+        "id": "72ab3806-33e3-4887-9ff8-0e8a9a64aa39"
+    },
+    {
+        "symbol": "FSK",
+        "id": "9f0f7537-ca3f-4337-8f7d-a1cfa7a923fb"
+    },
+    {
+        "symbol": "TSLX",
+        "id": "a1ff9400-dd7f-4026-a54f-a1303f115be5"
+    },
+    {
+        "symbol": "PCPL",
+        "id": "2092953a-51bd-4739-b5a4-cf965569ca89"
+    },
+    {
+        "symbol": "SRV",
+        "id": "edf9e54c-5db3-4ed4-ae09-df8eec1825f1"
+    },
+    {
+        "symbol": "SZC",
+        "id": "45513ea7-237f-4362-b71c-b1ad809df064"
+    },
+    {
         "symbol": "AZEK",
         "id": "6ddeaa62-5a51-4205-a0d3-9b088806295b"
     },
@@ -3316,10 +3356,6 @@
         "id": "517b9d44-a2bf-4731-98ac-104b4988a8b5"
     },
     {
-        "symbol": "PAAC",
-        "id": "9acb8161-456f-425f-b048-3e49d78e630f"
-    },
-    {
         "symbol": "GO",
         "id": "122f275d-a429-4766-b1c7-d7794cd87fc2"
     },
@@ -5772,10 +5808,6 @@
         "id": "393bde5a-6e98-43dd-a9e3-73b0816c081a"
     },
     {
-        "symbol": "SAEX",
-        "id": "4b935878-f09b-4b56-af22-fdfe1f693fb6"
-    },
-    {
         "symbol": "PRNB",
         "id": "af5d2d4a-9e6b-4ac0-af25-df59e5b108a2"
     },
@@ -5866,10 +5898,6 @@
     {
         "symbol": "TRTY",
         "id": "42544387-a1e1-46f7-8728-119fb4df745d"
-    },
-    {
-        "symbol": "PYX",
-        "id": "b961e6f4-b955-4fd3-963b-9f2263edcda8"
     },
     {
         "symbol": "VVUS",
@@ -6958,6 +6986,10 @@
     {
         "symbol": "JAPAY",
         "id": "3d2aac59-6542-44b1-9cf0-ad7aedbb8d0e"
+    },
+    {
+        "symbol": "INVVY",
+        "id": "a5d28cc6-7cde-4fb8-9602-de41500b0807"
     },
     {
         "symbol": "CKHUY",
@@ -8300,10 +8332,6 @@
         "id": "2a1b5ceb-3b57-41de-81cc-d6ee8eee43cc"
     },
     {
-        "symbol": "JPLS",
-        "id": "bcaceb54-0140-41f1-a727-35d778d27f10"
-    },
-    {
         "symbol": "SLDB",
         "id": "f0ac15c9-c6d9-4ab8-b42f-1ed33f3ad297"
     },
@@ -8626,10 +8654,6 @@
     {
         "symbol": "LBC",
         "id": "da9008b0-42ea-452e-b6fb-c5f02f1b5198"
-    },
-    {
-        "symbol": "JPMF",
-        "id": "33ab1a20-655d-492b-b95d-3d6c3f469d78"
     },
     {
         "symbol": "QTRX",
@@ -9918,10 +9942,6 @@
     {
         "symbol": "IBML",
         "id": "06365939-1e43-4747-a646-12ad684bc769"
-    },
-    {
-        "symbol": "TOCA",
-        "id": "abf88fb6-7698-4219-ac83-5e9e2a4d64d3"
     },
     {
         "symbol": "YEXT",
@@ -11554,10 +11574,6 @@
     {
         "symbol": "SMBK",
         "id": "1b112feb-9318-4b26-88fd-4ba7f2991c4e"
-    },
-    {
-        "symbol": "JPEU",
-        "id": "cbd67aeb-d726-42a2-a51a-5b4c1d7fc650"
     },
     {
         "symbol": "CCRC",
@@ -13212,10 +13228,6 @@
         "id": "ff35d03f-643d-456c-9b09-b1e88f7897df"
     },
     {
-        "symbol": "SZC",
-        "id": "44517757-0532-4db6-b817-2a6b16b1fd62"
-    },
-    {
         "symbol": "PPT",
         "id": "3310ea32-1dfc-4085-a0cb-5d124d959e97"
     },
@@ -13334,10 +13346,6 @@
     {
         "symbol": "PBT",
         "id": "f58389ff-342d-400d-bcd9-d54da998f6a2"
-    },
-    {
-        "symbol": "MNE",
-        "id": "bd01eb4e-f0ff-4ee4-9dc1-59a4ae5ee31a"
     },
     {
         "symbol": "SCD",
@@ -14654,10 +14662,6 @@
     {
         "symbol": "NMT",
         "id": "4f64f365-1dd9-468d-b1f2-97f271265b67"
-    },
-    {
-        "symbol": "SRV",
-        "id": "98a0c0ab-976e-4133-988f-2883ba47d4b3"
     },
     {
         "symbol": "BCV",
@@ -16236,10 +16240,6 @@
         "id": "40b59eae-5d96-445e-bec7-aa329f8beb25"
     },
     {
-        "symbol": "EQM",
-        "id": "c4d9f4ad-e0cc-488d-8864-7dd2fc3edecc"
-    },
-    {
         "symbol": "NRP",
         "id": "0c85bce2-f5f2-4d3c-b36b-041e5d0b373f"
     },
@@ -17720,10 +17720,6 @@
         "id": "f35f1cc5-8e75-4c62-95d4-9fca9dae662a"
     },
     {
-        "symbol": "FSK",
-        "id": "dbaa862d-2121-4648-bb63-c610f2903bad"
-    },
-    {
         "symbol": "MTB",
         "id": "d387ac65-e9b5-4da5-b825-807ececa75b7"
     },
@@ -18898,10 +18894,6 @@
     {
         "symbol": "PNBK",
         "id": "2be8744d-ea36-4219-9cae-b6a948a7e316"
-    },
-    {
-        "symbol": "TSLX",
-        "id": "ce71304f-fc0d-45a9-a48e-8e67108765ff"
     },
     {
         "symbol": "TSLA",
@@ -29642,10 +29634,6 @@
     {
         "symbol": "EXPE",
         "id": "01422ebf-263c-4366-8104-816e2eafdd2b"
-    },
-    {
-        "symbol": "KEM",
-        "id": "2a78ff32-e4c2-4e5b-a534-3bc5f917aa3c"
     },
     {
         "symbol": "NMFC",

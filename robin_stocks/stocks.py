@@ -12,7 +12,7 @@ def get_instruments():
     url = urls.instruments()
     results = helper.request_get(url)
     for instrument in results["results"]:
-            if is_tradeable(instrument["id"]):
+            if instrument["tradeable"] and instrument["tradability"] == "tradable":
                 instruments.append(
                     {
                         "symbol": instrument["symbol"],
@@ -25,7 +25,7 @@ def get_instruments():
         results = helper.request_get(url)
         
         for instrument in results["results"]:
-            if is_tradeable(instrument["id"]):
+            if instrument["tradeable"] and instrument["tradability"] == "tradable":
                 instruments.append(
                     {
                         "symbol": instrument["symbol"],
@@ -58,9 +58,34 @@ def get_quotes(inputSymbols, info=None):
     symbols = helper.inputs_to_set(inputSymbols)
     url = urls.quotes()
     payload = {'symbols': ','.join(symbols)}
-    auth.login()
     data = helper.request_get(url, 'results', payload)
-    auth.logout()
+
+    if (data == None or data == [None]):
+        return data
+
+    for count, item in enumerate(data):
+        if item is None:
+            print(helper.error_ticker_does_not_exist(symbols[count]))
+
+    data = [item for item in data if item is not None]
+
+    return(helper.filter(data, info))
+
+def get_quotes_by_ids(inputIds, info=None):
+    """Takes any number of stock tickers and returns information pertaining to its price.
+
+    :param inputIds: May be a single stock id or a list of stock ids.
+    :type inputIds: str or list
+    :param info: Will filter the results to have a list of the values that correspond to key that matches info.
+    :type info: Optional[str]
+    :returns: If info parameter is left as None then the list will contain a dictionary of key/value pairs for each ticker. \
+    Otherwise, it will be a list of strings where the strings are the values of the key that corresponds to info.
+
+    """
+    symbols = helper.inputs_to_set(inputIds)
+    url = urls.quotes()
+    payload = {'ids': ','.join(symbols)}
+    data = helper.request_get(url, 'results', payload)
 
     if (data == None or data == [None]):
         return data
@@ -273,25 +298,53 @@ def get_ratings(symbol, info=None):
 
 @helper.convert_none_to_string
 def get_popularity(symbol, info=None):
-    """Returns the number of open positions.
 
+    """Returns the number of open positions.
     :param symbol: The stock ticker.
     :type symbol: str
     :param info: Will filter the results to be a string value.
     :type info: Optional[str]
     :returns: If the info parameter is provided, then the function will extract the value of the key \
     that matches the info parameter. Otherwise, the whole dictionary is returned.
-
     """
     try:
         symbol = symbol.upper().strip()
     except AttributeError as message:
         print(message)
         return None
-    url = urls.popularity(symbol)
-    data = helper.request_get(url)
+    url = urls.popularity()
+    payload = {'ids': helper.id_for_stock(symbol)}
+    data = helper.request_get(url, payload)
     res = helper.filter(data, info)
-    return res
+    return res[0]
+
+@helper.convert_none_to_string
+def get_popularity_by_ids(inputIds, info=None):
+    """Returns the number of open positions.
+
+    :param inputSymbols: The stock ids.
+    :type symbol: str, list
+    :param info: Will filter the results to be a string value.
+    :type info: Optional[str]
+    :returns: If the info parameter is provided, then the function will extract the value of the key \
+    that matches the info parameter. Otherwise, the whole dictionary is returned.
+
+    """
+    ids = helper.inputs_to_set(inputIds)
+    url = urls.popularity()
+    payload = {'ids': ','.join(ids)}
+    data = helper.request_get(url, payload=payload)
+
+    if (data == None or data == [None]):
+        return data
+
+    for count, item in enumerate(data):
+        if item is None:
+            print(helper.error_ticker_does_not_exist(ids[count]))
+
+    # data = [item for item in data if item is not None]
+
+    return(helper.filter(data, info))
 
 def get_events(symbol, info=None):
     """Returns the events related to a stock.

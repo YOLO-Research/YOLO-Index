@@ -229,7 +229,7 @@ def inputs_to_set(inputSymbols):
     symbols_set = set()
 
     def add_symbol(symbol):
-        symbol = symbol.upper().strip()
+        symbol = symbol.strip()
         if symbol not in symbols_set:
             symbols_set.add(symbol)
             symbols_list.append(symbol)
@@ -291,7 +291,11 @@ def request_get(url, dataType='regular', payload=None, jsonify_data=True):
             data = res.json()
         except (requests.exceptions.HTTPError, AttributeError) as message:
             print(message)
-            return(res.json())
+            try:
+                return(res.json())
+            except json.decoder.JSONDecodeError as e:
+                print("JSON decode failed")
+                return [None]
     else:
         res = SESSION.get(url, params=payload)
         return(res)
@@ -302,6 +306,8 @@ def request_get(url, dataType='regular', payload=None, jsonify_data=True):
         except KeyError as message:
             print("{0} is not a key in the dictionary".format(message))
             return([None])
+        except TypeError as msg:
+            print("Result was not a Dictionary")
     elif (dataType == 'pagination'):
         counter = 2
         nextData = data
@@ -409,7 +415,7 @@ def error_argument_not_key_in_dictionary(keyword):
 
 
 def error_ticker_does_not_exist(ticker):
-    return('Warning: "{0}" is not a valid stock ticker. It is being ignored'.format(ticker))
+    return('Warning: "{0}" is not a valid ticker or id. It is being ignored'.format(ticker))
 
 
 def error_must_be_nonzero(keyword):

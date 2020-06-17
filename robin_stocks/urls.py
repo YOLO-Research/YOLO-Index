@@ -64,8 +64,8 @@ def news(symbol):
     return('https://api.robinhood.com/midlands/news/{0}/?'.format(symbol))
 
 
-def popularity(symbol):
-    return('https://api.robinhood.com/instruments/{0}/popularity/'.format(id_for_stock(symbol)))
+def popularity():
+    return('https://api.robinhood.com/instruments/popularity/')
 
 
 def quotes():

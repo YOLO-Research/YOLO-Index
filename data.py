@@ -14,7 +14,7 @@ def init(db):
 def collect_instruments(file):
     """ 
     Collect all valid instruments and create necessary tables 
-    Estimated Time (15 minutes)
+    Estimated Time (1 minute)
 
     :param file: json file path
     :type file_path: str
@@ -28,7 +28,7 @@ def collect_instruments(file):
 def collect_data(file):
     """ 
     Collects popularity and price data for all instruments in file
-    Estimated Time (2 hours 20 minutes)
+    Estimated Time (5 minutes)
 
     :param file: json file path
     :type file_path: str
@@ -38,37 +38,47 @@ def collect_data(file):
         results = json.load(file)
 
         with sqlite.create_connection("data.sqlite") as conn:
-            timestamp = datetime.now()
             print("Beginning data collection...")
 
             # iterate through all instruments
+            queue = []
             for res in results:
 
-                pop = stocks.get_popularity(res["symbol"])
-                price = stocks.get_quotes(res["symbol"])
+                if len(queue) < 25:
+                    queue.append(res["id"])
 
-                # handle API throttling
-                while pop.get("detail") or price.get("detail"):
+                else:
+                    pop = stocks.get_popularity_by_ids(queue)
+                    authentication.login("b15c@ymail.com", "Hockeyfreak15")
+                    price = stocks.get_quotes_by_ids(queue)
 
-                    if pop.get("detail"):
-                        cooldown = helper.parse_throttle_res(pop.get("detail"))
-                        print("API Throttling... waiting {} seconds.".format(cooldown))
-                        time.sleep(cooldown)
+                    # handle API throttling
+                    while pop.get("detail") or price[0].get("detail"):
 
-                    elif price.get("detail"):
-                        cooldown = helper.parse_throttle_res(price.get("detail"))
-                        print("API Throttling... waiting {} seconds.".format(cooldown))
-                        time.sleep(cooldown)
+                        if pop.get("detail"):
+                            cooldown = helper.parse_throttle_res(pop.get("detail"))
+                            print("API Throttling... waiting {} seconds.".format(cooldown))
+                            time.sleep(cooldown)
 
-                    # recollect data after cooldown
-                    pop = stocks.get_popularity(res["symbol"])
-                    price = stocks.get_quotes(res["symbol"])
+                        elif price.get("detail"):
+                            cooldown = helper.parse_throttle_res(price.get("detail"))
+                            print("API Throttling... waiting {} seconds.".format(cooldown))
+                            time.sleep(cooldown)
 
-                pop = pop["num_open_positions"]
-                price = price["last_trade_price"]
+                        # recollect data after cooldown
+                        pop = stocks.get_popularity_by_ids(queue)
+                        price = stocks.get_quotes_by_ids(queue)
 
-                # insert data into database
-                sqlite.insert(conn, res["id"], timestamp, pop, price)
+                    for i in range(len(queue)):
+                        
+                        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+                        sqlite.insert(conn, queue[i], timestamp, 
+                            pop['results'][i]['num_open_positions'], 
+                            price[i]["last_trade_price"])
+                    queue = []
+
+            authentication.logout()
 
 ######## CSV IMPORT FUNCTIONS ########
 
@@ -123,17 +133,18 @@ def main():
             init("data.sqlite")
             print("Initialization complete.")
 
-            print("Collecting instruments. Expected time: 2 hours 20 minutes")
+            print("Collecting instruments. Expected time: 1 minute")
             collect_instruments("instruments.json")
             print("Instrument collection complete.")
 
         # Collect price and popularity data.
         if '1' in sys.argv[1]:
-            print("Collecting data. Expected time: 2 hours")
+            print("Collecting data. Expected time: 5 minutes")
             collect_data("instruments.json")
             print("Data collection complete.")
 
     ######## TEST CODE ########
+
 
     ######## PUT CODE ABOVE ########
     
