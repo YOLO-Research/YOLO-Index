@@ -49,7 +49,7 @@ def collect_data(file):
 
                 else:
                     pop = stocks.get_popularity_by_ids(queue)
-                    authentication.login("b15c@ymail.com", "Hockeyfreak15")
+                    authentication.login()
                     price = stocks.get_quotes_by_ids(queue)
 
                     # handle API throttling
