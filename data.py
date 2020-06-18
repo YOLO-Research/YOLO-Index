@@ -21,7 +21,10 @@ def collect_instruments(file):
     """
 
     results = stocks.get_instruments()
-    with open(file, "w") as file:
+    if results == {}:
+        print("Collection Failed. Aborting")
+        return None
+    with open(file, "w") as file:   
         file.write(json.dumps(results, indent=4))
 
 def collect_data(file):
@@ -50,8 +53,6 @@ def collect_data(file):
                 queue = []
 
         if len(queue) > 0: process_queue(queue)
-        authentication.logout()
-
 
 def process_queue(queue):
     """
@@ -80,6 +81,7 @@ def process_queue(queue):
         pop = stocks.get_popularity_by_ids(queue)
         price = stocks.get_quotes_by_ids(queue)
 
+    print(len(pop), len(price))
     for i in range(len(price)):
         
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
