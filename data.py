@@ -79,6 +79,7 @@ def process_queue(queue):
 
         # recollect data after cooldown
         pop = stocks.get_popularity_by_ids(queue)
+        authentication.login(os.environ.get("ROBIN_USER"), os.environ.get("ROBIN_PASS"))
         price = stocks.get_quotes_by_ids(queue)
 
     print(len(pop), len(price))
