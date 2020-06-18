@@ -37,52 +37,61 @@ def collect_data(file):
     with open(file, "r") as file:
         results = json.load(file)
 
+        print("Beginning data collection...")
+
+        # iterate through all instruments
+        queue = []
+        for res in results:
+
+            if len(queue) < 25:
+                queue.append(res["id"])
+
+            else:
+                process_queue(queue)
+                queue = []
+
+        if len(queue) > 0: process_queue(queue)
+        authentication.logout()
+
+
+def process_queue(queue):
+    """
+    Process a queue of stock ids by fetching recent price and popularity data
+    :param queue: queue of ids to be processed
+    :type queue: list
+    """
+
+    pop = stocks.get_popularity_by_ids(queue)
+    authentication.login(os.environ.get("ROBIN_USER"), os.environ.get("ROBIN_PASS"))
+    price = stocks.get_quotes_by_ids(queue)
+
+    while pop.get("detail") or price[0].get("detail"):
+
+        if pop.get("detail"):
+            cooldown = helper.parse_throttle_res(pop.get("detail"))
+            print("API Throttling... waiting {} seconds.".format(cooldown))
+            time.sleep(cooldown)
+
+        elif price.get("detail"):
+            cooldown = helper.parse_throttle_res(price.get("detail"))
+            print("API Throttling... waiting {} seconds.".format(cooldown))
+            time.sleep(cooldown)
+
+        # recollect data after cooldown
+        pop = stocks.get_popularity_by_ids(queue)
+        price = stocks.get_quotes_by_ids(queue)
+
+    for i in range(len(queue)):
+        
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         with sqlite.create_connection("data.sqlite") as conn:
-            print("Beginning data collection...")
-
-            # iterate through all instruments
-            queue = []
-            for res in results:
-
-                if len(queue) < 25:
-                    queue.append(res["id"])
-
-                else:
-                    pop = stocks.get_popularity_by_ids(queue)
-                    authentication.login()
-                    price = stocks.get_quotes_by_ids(queue)
-
-                    # handle API throttling
-                    while pop.get("detail") or price[0].get("detail"):
-
-                        if pop.get("detail"):
-                            cooldown = helper.parse_throttle_res(pop.get("detail"))
-                            print("API Throttling... waiting {} seconds.".format(cooldown))
-                            time.sleep(cooldown)
-
-                        elif price.get("detail"):
-                            cooldown = helper.parse_throttle_res(price.get("detail"))
-                            print("API Throttling... waiting {} seconds.".format(cooldown))
-                            time.sleep(cooldown)
-
-                        # recollect data after cooldown
-                        pop = stocks.get_popularity_by_ids(queue)
-                        price = stocks.get_quotes_by_ids(queue)
-
-                    for i in range(len(queue)):
-                        
-                        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-                        sqlite.insert(conn, queue[i], timestamp, 
-                            pop['results'][i]['num_open_positions'], 
-                            price[i]["last_trade_price"])
-                    queue = []
-
-            authentication.logout()
+            sqlite.insert(conn, queue[i], timestamp, 
+                pop['results'][i]['num_open_positions'], 
+                price[i]["last_trade_price"])
 
 ######## CSV IMPORT FUNCTIONS ########
 
-def import_csv(dir):
+def import_csv(directory):
     """
     Import an entire directory of CSV files (requires authentication)
     """
@@ -91,31 +100,50 @@ def import_csv(dir):
     with open("instruments.json", "r") as instruments_f:
         instruments = json.load(instruments_f)
 
+    queue = []
     for instrument in instruments:
-        filename = instrument["symbol"] + ".csv"
-        if filename in os.listdir(dir):
-            data = read_csv(instrument["symbol"], dir + '/' + filename)
-            with sqlite.create_connection("data.sqlite") as conn:
-                for d in data:
-                    sqlite.insert(conn, instrument["id"], d[0], d[1], d[2])
+        if len(queue) < 50:
+            filename = instrument["symbol"] + ".csv"
+            if filename in os.listdir(directory):
+                queue.append(instrument["symbol"])
+        else:
+            data = read_csv(queue, directory)
+            for datum in data:
+                with sqlite.create_connection("data.sqlite") as conn:
+                    sqlite.insert(conn, datum[0], datum[1], datum[2], datum[3])
+            queue = []
+    if len(queue) > 0:
+        data = read_csv(queue, directory)
+        for datum in data:
+                with sqlite.create_connection("data.sqlite") as conn:
+                    sqlite.insert(conn, datum[0], datum[1], datum[2], datum[3])
 
 
-def read_csv(symbol, path):
+def read_csv(symbols, directory):
     """
-    Read a singular CSV file named {symbol}.csv at path (requires authentication)
+    Read a batch of CSV files named {symbol}.csv at path (requires authentication)
     """
 
-    with open(path, "r") as csvfile:
-        reader = csv.reader(csvfile, delimiter=' ', quotechar='|')
-        final_data = []
-        count = 0
-        data = stocks.get_historicals(symbol, span="year")
-        for d in data:
-            matches = [row for row in reader if row[0][1:] in d["begins_at"]]
-            if len(matches) > 0:
-                final_data.append((matches[-1][0][1:], matches[-1][1].split(',')[1], float(d["close_price"])))
-            csvfile.seek(0)
-        return final_data
+    final_data = []
+    results = stocks.get_historicals(symbols, span="year")
+    for result in results:
+        res_id = result["InstrumentID"]
+        path = directory + "/" + result["symbol"] + ".csv"
+        with open(path, "r") as csvfile:
+            reader = csv.reader(csvfile)
+
+            for quote in result["historicals"]:
+                matches = []
+                found = False
+                for row in reader:
+                    if row[0][:10] in quote["begins_at"]:
+                        matches.append(row)
+                        found = True
+                    elif found == True:
+                        break
+                if len(matches) > 0:
+                    final_data.append((res_id, matches[-1][0], matches[-1][1], float(quote["close_price"])))
+    return final_data
 
 ######################################
 
@@ -144,7 +172,6 @@ def main():
             print("Data collection complete.")
 
     ######## TEST CODE ########
-
 
     ######## PUT CODE ABOVE ########
     

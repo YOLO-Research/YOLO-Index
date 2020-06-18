@@ -513,19 +513,13 @@ def get_historicals(inputSymbols, span='week', bounds='regular'):
     if (data == None or data == [None]):
         return data
 
-    histData = []
     for count, item in enumerate(data):
         try:
             if (len(item['historicals']) == 0):
                 print(helper.error_ticker_does_not_exist(symbols[count]))
-                continue
-            stockSymbol = item['symbol']
-            for subitem in item['historicals']:
-                subitem['symbol'] = stockSymbol
-                histData.append(subitem)
         except TypeError as e:
             print("Failed to load historical data for", symbols[count])
-    return(histData)
+    return data
 
 
 def get_quote_by_id(stock_id, info=None):
