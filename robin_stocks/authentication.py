@@ -7,8 +7,8 @@ import random
 import robin_stocks.helper as helper
 import robin_stocks.urls as urls
 
-USER = ""
-PASS = ""
+USER = os.environ.get("ROBIN_USER")
+PASS = os.environ.get("ROBIN_PASS")
 
 def generate_device_token():
     """This function will generate a token used when loggin on.
