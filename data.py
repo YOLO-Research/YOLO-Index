@@ -80,7 +80,7 @@ def process_queue(queue):
         pop = stocks.get_popularity_by_ids(queue)
         price = stocks.get_quotes_by_ids(queue)
 
-    for i in range(len(queue)):
+    for i in range(len(price)):
         
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         with sqlite.create_connection("data.sqlite") as conn:
