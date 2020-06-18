@@ -11,6 +11,9 @@ def get_instruments():
 
     url = urls.instruments()
     results = helper.request_get(url)
+    if isinstance(results, str): 
+        print("API Request Error. Returning...")
+        return
     for instrument in results["results"]:
             if instrument["tradeable"] and instrument["tradability"] == "tradable":
                 instruments.append(

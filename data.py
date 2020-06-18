@@ -20,9 +20,8 @@ def collect_instruments(file):
     :type file_path: str
     """
 
+    results = stocks.get_instruments()
     with open(file, "w") as file:
-        
-        results = stocks.get_instruments()
         file.write(json.dumps(results, indent=4))
 
 def collect_data(file):
