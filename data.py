@@ -61,9 +61,9 @@ def process_queue(queue):
     :type queue: list
     """
 
-    pop = stocks.get_popularity_by_ids(queue)
+    pop = stocks.get_popularity_by_ids(queue, errors=False)
     authentication.login(username=os.environ.get("ROBIN_USER"), password=os.environ.get("ROBIN_PASS"))
-    price = stocks.get_quotes_by_ids(queue)
+    price = stocks.get_quotes_by_ids(queue, errors=False)
 
     while pop.get("detail") or price[0].get("detail"):
 
@@ -78,17 +78,29 @@ def process_queue(queue):
             time.sleep(cooldown)
 
         # recollect data after cooldown
-        pop = stocks.get_popularity_by_ids(queue)
+        pop = stocks.get_popularity_by_ids(queue, errors=False)
         authentication.login(username=os.environ.get("ROBIN_USER"), password=os.environ.get("ROBIN_PASS"))
-        price = stocks.get_quotes_by_ids(queue)
+        price = stocks.get_quotes_by_ids(queue, errors=False)
 
-    for i in range(len(price)):
-        
-        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        with sqlite.create_connection("data.sqlite") as conn:
-            sqlite.insert(conn, queue[i], timestamp, 
-                pop['results'][i]['num_open_positions'], 
-                price[i]["last_trade_price"])
+    results = {}
+    for res in pop['results']:
+        ins = helper.id_from_url(res["instrument"])
+        if not results.get(ins):
+            results[ins] = {}
+        results[ins]["pop"] = res['num_open_positions']
+    for res in price:
+        ins = helper.id_from_url(res["instrument"])
+        if not results.get(ins):
+            results[ins] = {}
+        results[ins]["price"] = res["last_trade_price"]
+    
+    for instrument,res in results.items():
+        if res.get('price'):
+            timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            with sqlite.create_connection("data.sqlite") as conn:
+                sqlite.insert(conn, instrument, timestamp, res['pop'], res['price'])
+        else:
+            print("Failed to fetch price for ", instrument)
 
 ######## CSV IMPORT FUNCTIONS ########
 

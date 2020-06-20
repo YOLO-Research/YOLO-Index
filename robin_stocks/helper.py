@@ -83,6 +83,12 @@ def id_for_stock(symbol):
 
     return(filter(data, 'id'))
 
+def id_from_url(url):
+    """
+    :param url: The intrument URL
+    :type url: str
+    """
+    return url.split('/')[-2]
 
 def id_for_chain(symbol):
     """Takes a stock ticker and returns the chain id associated with a stocks option.
@@ -262,7 +268,7 @@ def request_document(url, payload=None):
     return(res)
 
 
-def request_get(url, dataType='regular', payload=None, jsonify_data=True):
+def request_get(url, dataType='regular', payload=None, jsonify_data=True, errors=True):
     """For a given url and payload, makes a get request and returns the data.
 
     :param url: The url to send a get request to.
@@ -290,7 +296,7 @@ def request_get(url, dataType='regular', payload=None, jsonify_data=True):
             res.raise_for_status()
             data = res.json()
         except (requests.exceptions.HTTPError, AttributeError) as message:
-            print(message)
+            if errors: print(message)
             try:
                 return(res.json())
             except json.decoder.JSONDecodeError as e:

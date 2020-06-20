@@ -76,7 +76,7 @@ def get_quotes(inputSymbols, info=None):
 
     return(helper.filter(data, info))
 
-def get_quotes_by_ids(inputIds, info=None):
+def get_quotes_by_ids(inputIds, info=None, errors=True):
     """Takes any number of stock tickers and returns information pertaining to its price.
 
     :param inputIds: May be a single stock id or a list of stock ids.
@@ -90,7 +90,7 @@ def get_quotes_by_ids(inputIds, info=None):
     symbols = helper.inputs_to_set(inputIds)
     url = urls.quotes()
     payload = {'ids': ','.join(symbols)}
-    data = helper.request_get(url, 'results', payload)
+    data = helper.request_get(url, 'results', payload, errors=errors)
 
     if (data == None or data == [None]):
         return data
@@ -324,7 +324,7 @@ def get_popularity(symbol, info=None):
     return res[0]
 
 @helper.convert_none_to_string
-def get_popularity_by_ids(inputIds, info=None):
+def get_popularity_by_ids(inputIds, info=None, errors=True):
     """Returns the number of open positions.
 
     :param inputSymbols: The stock ids.
@@ -338,7 +338,7 @@ def get_popularity_by_ids(inputIds, info=None):
     ids = helper.inputs_to_set(inputIds)
     url = urls.popularity()
     payload = {'ids': ','.join(ids)}
-    data = helper.request_get(url, payload=payload)
+    data = helper.request_get(url, payload=payload, errors=errors)
 
     if (data == None or data == [None]):
         return data
