@@ -14,7 +14,7 @@ from robin_stocks.globals import LOGGED_IN, SESSION
 
 def pp_json(x: object) -> None:
     """ Pretty-prints the provided JSON-serializable object. """
-    print(json.dumps(x, indent=2, sort_keys=True))
+    print(json.dumps(x, indent=2))
 
 
 THROTTLE_RGX = r".*Expected available in (\d*\.?\d+) seconds."

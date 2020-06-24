@@ -186,6 +186,10 @@ def main():
 
     ######## TEST CODE ########
 
+    with sqlite.create_connection("data.sqlite") as conn:
+        data = index.compose_index(conn, "2019-12-02 23:", "2019-12-03 23:")
+        arr = [item["id"] for item in data]
+
     ######## PUT CODE ABOVE ########
     
     dt = datetime.now() - t1

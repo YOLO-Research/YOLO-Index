@@ -34,6 +34,42 @@ def create_table(conn):
         except Error as e:
             print(e)
 
+def create_index_table(conn):
+    """
+    Create a database table 
+    """
+
+    sql_create_table = """ CREATE TABLE IF NOT EXISTS 'index_data' (
+                             id integer NOT NULL,
+                             tm datetime NOT NULL,
+                             popularity int NOT NULL,
+                             price float NOT NULL,
+                             weight float NOT NULL
+                        ); 
+                        """
+    with conn:
+        try:
+            c = conn.cursor()
+            c.execute(sql_create_table)
+        except Error as e:
+            print(e)
+
+def index_insert(conn, id, timedate, popularity, price, weight):
+    """
+    Insert an SQL entry for an id 
+    """
+
+    sql_insert = """ INSERT INTO 'index_data' 
+                       (id, tm, popularity, price, weight)
+                       VALUES (?, ?, ?, ?); 
+                """
+    with conn:
+        try:
+            c = conn.cursor()
+            c.execute(sql_insert, (id, timedate, popularity, price, weight))
+        except Error as e:
+            print(e)    
+
 def insert(conn, id, timedate, popularity, price):
     """
     Insert an SQL entry for a ticker 
