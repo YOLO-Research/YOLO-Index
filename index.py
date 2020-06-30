@@ -123,7 +123,7 @@ def value_index(conn, date):
     :param date: Date to value index format "YYYY-MM-DD HH"
     """
 
-    query = "SELECT * FROM index_data WHERE tm LIKE '{}%' AND NOT weight=0.0;".format(date)
+    query = "SELECT * FROM index_data WHERE tm LIKE '{}%' AND NOT weight=0.0".format(date)
     with conn:
         cursor = conn.cursor()
         data = cursor.execute(query).fetchall()
@@ -136,12 +136,13 @@ def value_index(conn, date):
 
     return value
 
-def get_latest_weight(conn, id):
-    query = "SELECT * FROM index_data WHERE id = '{}';".format(id)
+def get_latest_weights(conn, instruments):
+    string = ", ".join("'{}'".format(i) for i in instruments)
+    query = "SELECT * FROM index_data WHERE id IN ({})".format(string)
+    res = []
     with conn:
         data = conn.cursor().execute(query).fetchall()
-        if len(data) > 0:
-            return data[-1][4]
-        else:
-            return 0
+        for d in data:
+            res.append({"id": d[0], "weight": d[4]})
+    return res
 

@@ -64,6 +64,8 @@ def process_queue(file, queue):
     pop = stocks.get_popularity_by_ids(queue, errors=False)
     authentication.login(username=os.environ.get("ROBIN_USER"), password=os.environ.get("ROBIN_PASS"))
     price = stocks.get_quotes_by_ids(queue, errors=False)
+    with sqlite.create_connection(file) as conn:
+        weights = index.get_latest_weights(conn, queue)
 
     while pop.get("detail") or price[0].get("detail"):
 
@@ -81,6 +83,8 @@ def process_queue(file, queue):
         pop = stocks.get_popularity_by_ids(queue, errors=False)
         authentication.login(username=os.environ.get("ROBIN_USER"), password=os.environ.get("ROBIN_PASS"))
         price = stocks.get_quotes_by_ids(queue, errors=False)
+        with sqlite.create_connection(file) as conn:
+            weights = index.get_latest_weights(conn, queue)
 
     results = {}
     for res in pop['results']:
@@ -93,12 +97,17 @@ def process_queue(file, queue):
         if not results.get(ins):
             results[ins] = {}
         results[ins]["price"] = res["last_trade_price"]
+    for res in weights:
+        ins = res["id"]
+        if not results.get(ins):
+            results[ins] = {}
+        results[ins]["weight"] = res["weight"]
     
     for instrument,res in results.items():
         if res.get('price'):
             timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             with sqlite.create_connection(file) as conn:
-                sqlite.index_insert(conn, instrument, timestamp, res['pop'], res['price'], index.get_latest_weight(conn, instrument))
+                sqlite.index_insert(conn, instrument, timestamp, res['pop'], res['price'], res['weight'])
         else:
             print("Failed to fetch price for ", instrument)
 
