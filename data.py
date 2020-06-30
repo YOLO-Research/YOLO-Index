@@ -4,7 +4,7 @@ import sqlite, index
 
 # system packages
 import json, csv, time, sys, os
-from datetime import datetime
+from datetime import datetime, timedelta
 
 collect = False
 
@@ -36,8 +36,8 @@ def collect_data(file):
     :type file_path: str
     """
     cooldown = 1
-    with open(file, "r") as file:
-        results = json.load(file)
+    with open(file, "r") as f:
+        results = json.load(f)
 
         print("Beginning data collection...")
 
@@ -49,12 +49,12 @@ def collect_data(file):
                 queue.append(res["id"])
 
             else:
-                process_queue(queue)
+                process_queue("data.sqlite", queue)
                 queue = []
 
-        if len(queue) > 0: process_queue(queue)
+        if len(queue) > 0: process_queue("data.sqlite", queue)
 
-def process_queue(queue):
+def process_queue(file, queue):
     """
     Process a queue of stock ids by fetching recent price and popularity data
     :param queue: queue of ids to be processed
@@ -97,10 +97,28 @@ def process_queue(queue):
     for instrument,res in results.items():
         if res.get('price'):
             timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            with sqlite.create_connection("data.sqlite") as conn:
-                sqlite.insert(conn, instrument, timestamp, res['pop'], res['price'])
+            with sqlite.create_connection(file) as conn:
+                sqlite.index_insert(conn, instrument, timestamp, res['pop'], res['price'], 0)
         else:
             print("Failed to fetch price for ", instrument)
+
+######## INDEX FUNCTIONS ########
+
+def collect_index(file, 
+    t1=(datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d %H"), t2=datetime.now().strftime("%Y-%m-%d %H")):
+
+    with sqlite.create_connection(file) as conn:
+        data = index.compose_index(conn, index.value_index(conn, t1), t1, t2)
+        index.update(conn, data)
+        s = 0
+        for d in data:
+            s += d["price"] * d["weight"]
+        print(s)
+
+def collect_index_value(file, time=datetime.now().strftime("%Y-%m-%d %H:")):
+    conn = sqlite.create_connection(file)
+    value = index.value_index(conn, time)
+    sqlite.insert_value(conn, time, value)
 
 ######## CSV IMPORT FUNCTIONS ########
 
@@ -184,11 +202,14 @@ def main():
             collect_data("instruments.json")
             print("Data collection complete.")
 
-    ######## TEST CODE ########
+        # Collect price and popularity data.
+        if '2' in sys.argv[1]:
+            print("Composing Index.")
+            collect_index("data.sqlite")
+            collect_index_value("data.sqlite")
+            print("Index Composition Complete.")
 
-    with sqlite.create_connection("data.sqlite") as conn:
-        data = index.compose_index(conn, "2019-12-02 23:", "2019-12-03 23:")
-        arr = [item["id"] for item in data]
+    ######## TEST CODE ########
 
     ######## PUT CODE ABOVE ########
     
