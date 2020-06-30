@@ -98,7 +98,7 @@ def process_queue(file, queue):
         if res.get('price'):
             timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             with sqlite.create_connection(file) as conn:
-                sqlite.index_insert(conn, instrument, timestamp, res['pop'], res['price'], 0)
+                sqlite.index_insert(conn, instrument, timestamp, res['pop'], res['price'], index.get_latest_weight(conn, instrument))
         else:
             print("Failed to fetch price for ", instrument)
 
