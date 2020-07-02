@@ -106,6 +106,7 @@ def process_queue(file, queue):
     for instrument,res in results.items():
         if res.get('price'):
             timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            if not res.get('weight'): res['weight'] = 0.0
             with sqlite.create_connection(file) as conn:
                 sqlite.index_insert(conn, instrument, timestamp, res['pop'], res['price'], res['weight'])
         else:
