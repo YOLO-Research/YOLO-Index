@@ -118,7 +118,7 @@ def collect_index(file,
     t1=(datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d %H"), t2=datetime.now().strftime("%Y-%m-%d %H")):
 
     with sqlite.create_connection(file) as conn:
-        data = index.compose_index(conn, index.value_index(conn, t1), t1, t2)
+        data = index.compose_index(conn, index.get_value(conn), t1, t2)
         index.update(conn, data)
         s = 0
         for d in data:

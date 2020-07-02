@@ -136,6 +136,20 @@ def value_index(conn, date):
 
     return value
 
+def get_value(conn, date=None):
+    i = 0
+    query = "SELECT * FROM index_value WHERE tm LIKE '{}%'".format(date)
+    if date is None:
+        query = "SELECT * FROM index_value"
+        i = -1
+    with conn:
+        cursor = conn.cursor()
+        data = cursor.execute(query).fetchall()
+        value = 100
+        if len(data) > 0:
+            value = data[i][1]
+    return value
+
 def get_latest_weights(conn, instruments):
     string = ", ".join("'{}'".format(i) for i in instruments)
     query = "SELECT * FROM index_data WHERE id IN ({})".format(string)
