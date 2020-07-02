@@ -111,7 +111,6 @@ def process_queue(file, queue):
                 sqlite.index_insert(conn, instrument, timestamp, res['pop'], res['price'], res['weight'])
         else:
             print("Failed to fetch price for ", instrument)
-    print("Queue Processed.")
 
 ######## INDEX FUNCTIONS ########
 
