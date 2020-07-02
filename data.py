@@ -220,6 +220,11 @@ def main():
             print("Index Composition Complete.")
 
     ######## TEST CODE ########
+    with sqlite.create_connection("data.sqlite") as conn:
+        data = index.get_composition(conn, "2020-07-02")
+        with open("test.csv", "r") as f:
+            writer = csv.writer(f)
+            writer.writerows(data)
 
     ######## PUT CODE ABOVE ########
     

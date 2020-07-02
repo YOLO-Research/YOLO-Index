@@ -150,6 +150,21 @@ def get_value(conn, date=None):
             value = data[i][1]
     return value
 
+def get_composition(conn, date):
+    query = "SELECT * FROM index_data WHERE tm LIKE '{}%' AND NOT weight = 0"
+    results = []
+    with conn:
+        data = conn.cursor().execute(query).fetchall()
+        for row in data:
+            results.append({
+                "id": row[0],
+                "tm": row[1],
+                "popularity": row[2],
+                "price": row[3],
+                "weight": row[4]
+                })
+        return results
+
 def get_latest_weights(conn, instruments):
     string = ", ".join("'{}'".format(i) for i in instruments)
     query = "SELECT * FROM index_data WHERE id IN ({})".format(string)
