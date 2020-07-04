@@ -108,7 +108,7 @@ def process_queue(file, queue):
             timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             if not res.get('weight'): res['weight'] = 0.0
             with sqlite.create_connection(file) as conn:
-                sqlite.index_insert(conn, instrument, timestamp, res['pop'], res['price'], res['weight'])
+                sqlite.index_insert(conn, instrument, timestamp, res['pop'], res['price'], 0)
         else:
             print("Failed to fetch price for ", instrument)
 
@@ -222,7 +222,7 @@ def main():
     ######## TEST CODE ########
     with sqlite.create_connection("data.sqlite") as conn:
         data = index.get_composition(conn, "2020-07-02")
-        with open("test.csv", "r") as f:
+        with open("test.csv", "w") as f:
             writer = csv.writer(f)
             writer.writerows(data)
 
