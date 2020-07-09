@@ -45,7 +45,7 @@ def collect_data(file):
         queue = []
         for res in results:
 
-            if len(queue) < 25:
+            if len(queue) < 50:
                 queue.append(res["id"])
 
             else:
@@ -63,8 +63,8 @@ def process_queue(file, queue):
     pop = stocks.get_popularity_by_ids(queue, errors=False)
     authentication.login(username=os.environ.get("ROBIN_USER"), password=os.environ.get("ROBIN_PASS"))
     price = stocks.get_quotes_by_ids(queue, errors=False)
-    with sqlite.create_connection(file) as conn:
-        weights = index.get_latest_weights(conn, queue)
+    # with sqlite.create_connection(file) as conn:
+    #     weights = index.get_latest_weights(conn, queue)
 
     while pop.get("detail") or price[0].get("detail"):
 
@@ -82,8 +82,8 @@ def process_queue(file, queue):
         pop = stocks.get_popularity_by_ids(queue, errors=False)
         authentication.login(username=os.environ.get("ROBIN_USER"), password=os.environ.get("ROBIN_PASS"))
         price = stocks.get_quotes_by_ids(queue, errors=False)
-        with sqlite.create_connection(file) as conn:
-            weights = index.get_latest_weights(conn, queue)
+        # with sqlite.create_connection(file) as conn:
+        #     weights = index.get_latest_weights(conn, queue)
 
     results = {}
     for res in pop['results']:
@@ -96,16 +96,16 @@ def process_queue(file, queue):
         if not results.get(ins):
             results[ins] = {}
         results[ins]["price"] = res["last_trade_price"]
-    for res in weights:
-        ins = res["id"]
-        if not results.get(ins):
-            results[ins] = {}
-        results[ins]["weight"] = res["weight"]
+    # for res in weights:
+    #     ins = res["id"]
+    #     if not results.get(ins):
+    #         results[ins] = {}
+    #     results[ins]["weight"] = res["weight"]
     
     for instrument,res in results.items():
         if res.get('price'):
             timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            if not res.get('weight'): res['weight'] = 0.0
+            # if not res.get('weight'): res['weight'] = 0.0
             with sqlite.create_connection(file) as conn:
                 sqlite.index_insert(conn, instrument, timestamp, res['pop'], res['price'], 0)
         else:
@@ -126,8 +126,9 @@ def collect_index(file,
 
 def collect_index_value(file, time=datetime.now().strftime("%Y-%m-%d %H:")):
     conn = sqlite.create_connection(file)
-    value = index.value_index(conn, time)
-    sqlite.insert_value(conn, time, value)
+    with conn:
+        value = index.value_index(conn, time)
+        sqlite.insert_value(conn, time, value)
 
 ######## CSV IMPORT FUNCTIONS ########
 
