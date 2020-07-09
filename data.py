@@ -124,7 +124,7 @@ def collect_index(file,
             s += d["price"] * d["weight"]
         print(s)
 
-def collect_index_value(file, time=datetime.now().strftime("%Y-%m-%d %H:")):
+def collect_index_value(file, time=datetime.now().strftime("%Y-%m-%d %H")):
     conn = sqlite.create_connection(file)
     with conn:
         value = index.value_index(conn, time)
