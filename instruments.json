@@ -1,5 +1,125 @@
 [
     {
+        "symbol": "GSIG",
+        "id": "02aea7b4-c2a2-4d73-b8f8-a153d13c1061"
+    },
+    {
+        "symbol": "BLCT",
+        "id": "170e966d-3b0f-494b-a2b9-72fc2fb04e8b"
+    },
+    {
+        "symbol": "TXAC",
+        "id": "c782e4de-e2cd-4297-8386-a93086808a4a"
+    },
+    {
+        "symbol": "AMYT",
+        "id": "560c9616-ddca-4f9b-9e03-c8ecae03195a"
+    },
+    {
+        "symbol": "OTRK",
+        "id": "377e5184-a066-4045-aecf-44901198a124"
+    },
+    {
+        "symbol": "SINO",
+        "id": "c7ce4597-6d17-42ae-89a9-32abf9371554"
+    },
+    {
+        "symbol": "JWS",
+        "id": "e7ba80cd-6c41-4a57-b039-8652e2ec1f71"
+    },
+    {
+        "symbol": "SNEX",
+        "id": "847998ca-67ec-4054-934e-e54067f1e404"
+    },
+    {
+        "symbol": "CEN",
+        "id": "06743349-a7dd-43d0-9123-941c4c0a6631"
+    },
+    {
+        "symbol": "SPQQ",
+        "id": "9aaaca17-d06b-41d5-b91a-41b382b3d5f0"
+    },
+    {
+        "symbol": "LMND",
+        "id": "9e8d3a92-b91d-47ad-9742-6b2107a63790"
+    },
+    {
+        "symbol": "NJUL",
+        "id": "c56c2fce-f714-48b4-aed6-1e92e91f08b3"
+    },
+    {
+        "symbol": "GIK",
+        "id": "b9ab9fb1-9fb2-4bd2-ad3a-28c05dc8f97d"
+    },
+    {
+        "symbol": "ACCD",
+        "id": "cdb9e96f-5231-4c72-9f15-b4258086de41"
+    },
+    {
+        "symbol": "IMTX",
+        "id": "c98a3316-c636-48e3-96b9-71775f10ca24"
+    },
+    {
+        "symbol": "JULZ",
+        "id": "33ca4b59-75e6-4ac7-9814-cd738064aeee"
+    },
+    {
+        "symbol": "KJUL",
+        "id": "ad8a3703-eed7-42ce-b679-98f14be8034f"
+    },
+    {
+        "symbol": "WSC",
+        "id": "dd0c6818-a526-44b4-878c-7de380d9f98e"
+    },
+    {
+        "symbol": "ANAT",
+        "id": "62a5e992-471e-443e-9540-15841f5c26fb"
+    },
+    {
+        "symbol": "HOFV",
+        "id": "4e6e0fab-f82f-4dff-a2e4-8c1ee7fa7d56"
+    },
+    {
+        "symbol": "AZAL",
+        "id": "aef6e456-2c0a-42c3-8462-73a4ae651f67"
+    },
+    {
+        "symbol": "AZBL",
+        "id": "0788023e-5f87-48b9-843f-9e54ca24b1ef"
+    },
+    {
+        "symbol": "DNB",
+        "id": "0690d16b-9739-4744-bfb7-3f421b20df51"
+    },
+    {
+        "symbol": "MGNI",
+        "id": "6d285ee1-1069-4a19-9cda-158e4c5e5568"
+    },
+    {
+        "symbol": "ALTA",
+        "id": "fad6cd0b-2ac6-41b1-b170-a55162643953"
+    },
+    {
+        "symbol": "MTCH",
+        "id": "8886c92c-7bbe-4014-994a-6509bb3b0009"
+    },
+    {
+        "symbol": "IAC",
+        "id": "dddd9511-b50c-4e82-a3b5-351d34277b3f"
+    },
+    {
+        "symbol": "ALTM",
+        "id": "5ac1a831-767c-44c1-be8e-39a4951f18f1"
+    },
+    {
+        "symbol": "ODP",
+        "id": "e1023472-3dc9-479e-b8cb-c847395f219d"
+    },
+    {
+        "symbol": "TNP",
+        "id": "e67e87cf-4665-491f-8d5c-ef9375e1c649"
+    },
+    {
         "symbol": "SHIP",
         "id": "be9d6d8c-dbe5-47c7-8619-2154a11061ac"
     },
@@ -1828,10 +1948,6 @@
         "id": "7d7fdd5e-8552-476c-bafd-f64667d8a607"
     },
     {
-        "symbol": "UGAZ",
-        "id": "129e6b05-7a23-49a1-8a3e-e9f4f2855dbd"
-    },
-    {
         "symbol": "JIH",
         "id": "74c1c19b-ebf8-4832-b698-21489e3918a7"
     },
@@ -2070,14 +2186,6 @@
     {
         "symbol": "TPSC",
         "id": "c2562193-9fd5-42c8-8ff3-9b923b40314e"
-    },
-    {
-        "symbol": "VIIX",
-        "id": "eb939770-96c7-4b24-bfe8-ed5ce0f71973"
-    },
-    {
-        "symbol": "TVIX",
-        "id": "f4d089b7-c822-48ac-884d-8ecb312ebb67"
     },
     {
         "symbol": "FINV",
@@ -2346,6 +2454,10 @@
     {
         "symbol": "EXPC",
         "id": "b7c2182e-5e62-4c31-839d-29713f4e1675"
+    },
+    {
+        "symbol": "DUO",
+        "id": "0e38d51e-2a48-444d-934c-8cdb0836d209"
     },
     {
         "symbol": "NPA",
@@ -5304,10 +5416,6 @@
         "id": "87ebdc97-c87b-4ded-ac19-4afffbcda385"
     },
     {
-        "symbol": "DGAZ",
-        "id": "5094a43e-4cee-4877-aa83-6cefd468498f"
-    },
-    {
         "symbol": "ALAC",
         "id": "d963a0cd-e407-4b87-b771-91006fcc8b0e"
     },
@@ -5318,10 +5426,6 @@
     {
         "symbol": "TC",
         "id": "f5cda666-076d-4822-81ed-8ec4dbfead37"
-    },
-    {
-        "symbol": "RTW",
-        "id": "a7883bb6-af3c-42c2-a099-1b68f79ac445"
     },
     {
         "symbol": "MCFT",
@@ -5438,10 +5542,6 @@
     {
         "symbol": "ALYA",
         "id": "14ef00fe-0625-48be-a5d8-9c185a08f1ac"
-    },
-    {
-        "symbol": "ARYA",
-        "id": "9a0abdef-bc91-4cdc-8d6a-a960e2737ae1"
     },
     {
         "symbol": "FUMB",
@@ -5638,14 +5738,6 @@
     {
         "symbol": "LOAC",
         "id": "73fb64a6-c4c8-4699-a9f9-e7038e662add"
-    },
-    {
-        "symbol": "UGLD",
-        "id": "50fad2f3-7d2e-48b4-a071-0511d68b06b6"
-    },
-    {
-        "symbol": "USLV",
-        "id": "b436e1e9-aa1a-4f94-bb62-d77b578af4ce"
     },
     {
         "symbol": "GLBS",
@@ -7700,10 +7792,6 @@
         "id": "ecaba032-7652-4a4e-8931-8353564ff1e5"
     },
     {
-        "symbol": "EASI",
-        "id": "92b4562f-6d6c-4898-bea6-acd2b9d55013"
-    },
-    {
         "symbol": "CHRA",
         "id": "b22ba598-b9d9-4e96-a456-b242d359677a"
     },
@@ -7774,10 +7862,6 @@
     {
         "symbol": "WH",
         "id": "81121f11-a968-4064-b012-63fc8af9e97b"
-    },
-    {
-        "symbol": "CVIA",
-        "id": "52b39774-3707-45ac-86e9-7bc9de8397e7"
     },
     {
         "symbol": "IMV",
@@ -8254,10 +8338,6 @@
     {
         "symbol": "ORGS",
         "id": "979fbc65-2891-42d2-a6a3-11bd6490d19e"
-    },
-    {
-        "symbol": "GPAQ",
-        "id": "2bb2450d-3eae-45d6-81a4-d7623f98c621"
     },
     {
         "symbol": "COCP",
@@ -10048,10 +10128,6 @@
         "id": "43477ea6-3ffd-48b5-8984-ca52a2c3c420"
     },
     {
-        "symbol": "ALTM",
-        "id": "bb8b1d4c-ea3f-4a95-9ae3-4a620de71d15"
-    },
-    {
         "symbol": "VRNA",
         "id": "0c0624f5-4ceb-41dd-a602-2758d37c1575"
     },
@@ -10062,10 +10138,6 @@
     {
         "symbol": "USOI",
         "id": "822e2654-f4b8-477d-a794-4bc8f8c3e6f1"
-    },
-    {
-        "symbol": "CATS",
-        "id": "b5447679-8b7f-4efe-86c4-b0b821d70d27"
     },
     {
         "symbol": "PCSB",
@@ -10182,10 +10254,6 @@
     {
         "symbol": "AYX",
         "id": "f69573b8-d80a-4df9-9c36-4fdd2be5c70f"
-    },
-    {
-        "symbol": "TRPX",
-        "id": "b4dc4541-4915-4fa5-9d63-ba15c48da412"
     },
     {
         "symbol": "CEFS",
@@ -10714,10 +10782,6 @@
     {
         "symbol": "TUSK",
         "id": "165aa69e-d2ca-42d3-9fba-acd1a8f796c8"
-    },
-    {
-        "symbol": "OTTW",
-        "id": "55a1666d-a8ff-42fc-9dbc-1f7f6023e6a3"
     },
     {
         "symbol": "BCTF",
@@ -11816,10 +11880,6 @@
         "id": "d13ed7e2-9b4e-4ca2-8e69-cce02b91fc75"
     },
     {
-        "symbol": "MTCH",
-        "id": "92f55c5a-56a6-4abd-b10d-02ae84460899"
-    },
-    {
         "symbol": "SQ",
         "id": "f3acdd2f-6580-4c75-a69c-81481cc4c235"
     },
@@ -11946,10 +12006,6 @@
     {
         "symbol": "TWNK",
         "id": "ecf97954-2503-4efa-9a05-4d34685e6812"
-    },
-    {
-        "symbol": "WSC",
-        "id": "4b11df30-4458-46b1-bba9-f37e5d10c378"
     },
     {
         "symbol": "CNCR",
@@ -12630,10 +12686,6 @@
     {
         "symbol": "WING",
         "id": "cb64c837-faf7-4ba2-8cb2-1007d2f21292"
-    },
-    {
-        "symbol": "PUB",
-        "id": "94aa4a67-a21d-441a-ae02-fe5a2a8bddcb"
     },
     {
         "symbol": "DTEA",
@@ -14086,10 +14138,6 @@
     {
         "symbol": "CEM",
         "id": "e1bb5cac-dbae-41f7-88eb-d6991755a7de"
-    },
-    {
-        "symbol": "CEN",
-        "id": "2987b3af-d1e3-403d-b2f8-56019df399be"
     },
     {
         "symbol": "CEE",
@@ -18652,10 +18700,6 @@
         "id": "a0388004-2db2-4366-a7a9-3c76e53fcda6"
     },
     {
-        "symbol": "TNP",
-        "id": "335a0643-a35a-42b3-b3a0-c2b5263ea38a"
-    },
-    {
         "symbol": "GVI",
         "id": "b4535668-3b6a-4241-bb2d-c56d007c0284"
     },
@@ -18862,10 +18906,6 @@
     {
         "symbol": "IBKR",
         "id": "8ff64d6f-e328-499c-815d-7a024c3fe6ef"
-    },
-    {
-        "symbol": "IBKC",
-        "id": "52a1059b-06e5-4822-8c7d-74948316cd42"
     },
     {
         "symbol": "MHH",
@@ -19208,10 +19248,6 @@
         "id": "25c3560f-355d-48b6-9578-98ac5ad7a1c4"
     },
     {
-        "symbol": "DSLV",
-        "id": "a5b2876e-f710-470e-bcc7-7dca601bfa70"
-    },
-    {
         "symbol": "NTUS",
         "id": "985861c4-da1b-4698-9db5-cdf4f33c4ff4"
     },
@@ -19494,10 +19530,6 @@
     {
         "symbol": "UEC",
         "id": "359e4b1f-5e2b-4fbf-b278-129df2e87243"
-    },
-    {
-        "symbol": "ODP",
-        "id": "37c2cf69-9772-4498-9664-8b223bcd4956"
     },
     {
         "symbol": "ATSG",
@@ -20588,10 +20620,6 @@
         "id": "6ca8fa67-8dfb-4747-a0ff-b15de9ee64ed"
     },
     {
-        "symbol": "ANAT",
-        "id": "8f6c7165-a5b5-4551-aef8-e2082d483893"
-    },
-    {
         "symbol": "WEX",
         "id": "5ea7992b-e531-495d-a16c-7db8a7ec637d"
     },
@@ -21604,7 +21632,7 @@
         "id": "f2845b32-9e5c-4c1b-bd4a-2edebec41228"
     },
     {
-        "symbol": "CVTI",
+        "symbol": "CVLG",
         "id": "23df5ef7-23d7-41d4-bd5a-5e0967ad2f65"
     },
     {
@@ -23348,10 +23376,6 @@
         "id": "1aeceb25-9370-45a1-a0f4-7dc9502d75a3"
     },
     {
-        "symbol": "ALO",
-        "id": "f3a82b6f-7476-4616-92fc-f1ea3d7a97a1"
-    },
-    {
         "symbol": "ATVI",
         "id": "93ec8a9c-d587-4867-9996-67733ec86980"
     },
@@ -23550,10 +23574,6 @@
     {
         "symbol": "LAKE",
         "id": "44db434a-05c5-4793-8448-06eefd95e671"
-    },
-    {
-        "symbol": "IAC",
-        "id": "a7c23576-6f99-46d4-9bdd-2a33267fedd6"
     },
     {
         "symbol": "UNAM",
@@ -23886,10 +23906,6 @@
     {
         "symbol": "INVE",
         "id": "dc483dc6-31aa-49b4-ae01-1f6b5836b6d9"
-    },
-    {
-        "symbol": "INTL",
-        "id": "eed7165d-ee35-4417-a548-df6d1b5b68b1"
     },
     {
         "symbol": "KLIC",
@@ -25280,10 +25296,6 @@
         "id": "8e774cd3-3601-44fb-97cb-1c8d4653d6d6"
     },
     {
-        "symbol": "PTLA",
-        "id": "80763ea2-17c9-4c31-b128-4b5866ede154"
-    },
-    {
         "symbol": "PATK",
         "id": "45f364ae-09d4-497c-b0b1-b985cf7d752f"
     },
@@ -25772,10 +25784,6 @@
         "id": "41f940e3-5460-449c-b046-b0263ac8e031"
     },
     {
-        "symbol": "DGLD",
-        "id": "52bf40a3-bdfe-4217-89a5-2797e1a4031c"
-    },
-    {
         "symbol": "MAIN",
         "id": "8f85511e-1b07-4e15-8376-1c717b95b288"
     },
@@ -26090,10 +26098,6 @@
     {
         "symbol": "GNTX",
         "id": "2d7f6284-b9eb-423c-bc3d-acb69b699032"
-    },
-    {
-        "symbol": "SINO",
-        "id": "9efdc32d-5ada-4d3d-8bbb-af143ef659cc"
     },
     {
         "symbol": "CSCO",
@@ -28040,10 +28044,6 @@
         "id": "5f3eee76-514d-4bd9-9317-8c2efc4d7113"
     },
     {
-        "symbol": "ZIV",
-        "id": "0bce5b1d-5564-4d28-ab06-ad59921be6cd"
-    },
-    {
         "symbol": "SNV",
         "id": "22b3ee08-5d5b-4de3-a467-ee064eb9cd7a"
     },
@@ -28382,10 +28382,6 @@
     {
         "symbol": "MINC",
         "id": "05478ee2-42e8-4380-930c-43519dd64d9e"
-    },
-    {
-        "symbol": "MINI",
-        "id": "173f9713-7d37-4305-a2fe-af26e0abcef3"
     },
     {
         "symbol": "VCSH",
@@ -28770,6 +28766,10 @@
     {
         "symbol": "EXC",
         "id": "cd787238-4c2f-4142-a37e-2ba33e664c44"
+    },
+    {
+        "symbol": "CXDO",
+        "id": "dddd4019-c5ed-4ec3-b023-d7bc83dfaad9"
     },
     {
         "symbol": "MCS",
@@ -29166,10 +29166,6 @@
     {
         "symbol": "PLPC",
         "id": "7defb82f-b8d8-4093-8c60-86edaf3fed2f"
-    },
-    {
-        "symbol": "RUBI",
-        "id": "3431ccd5-d3bd-4c3b-aaa8-a1ffef19d57f"
     },
     {
         "symbol": "HYZD",
