@@ -114,7 +114,8 @@ def update(conn, data):
     """
 
     for datum in data:
-        sqlite.index_update(conn, datum["id"], datum["tm"], datum["weight"])
+        with conn:
+            sqlite.index_update(conn, datum["id"], datum["tm"], datum["weight"])
 
 def value_index(conn, date):
     """

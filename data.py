@@ -60,7 +60,6 @@ def process_queue(file, queue):
     :param queue: queue of ids to be processed
     :type queue: list
     """
-    print("Processing Queue.")
     pop = stocks.get_popularity_by_ids(queue, errors=False)
     authentication.login(username=os.environ.get("ROBIN_USER"), password=os.environ.get("ROBIN_PASS"))
     price = stocks.get_quotes_by_ids(queue, errors=False)
