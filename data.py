@@ -211,6 +211,9 @@ def main():
             print("Collecting data. Expected time: 5 minutes")
             collect_data("instruments.json")
             print("Data collection complete.")
+            print("Valuing Index.")
+            collect_index_value("data.sqlite")
+            print("Index Valued")
 
         # Collect price and popularity data.
         if '2' in sys.argv[1]:
