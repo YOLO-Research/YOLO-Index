@@ -90,22 +90,25 @@ def compose_index(conn, value, date1, date2):
     num_pop = num_stocks - num_change
 
     composition = []
+    ids = []
     most_popular = sort_by_popularity(conn, date2)
     largest_change = sort_by_largest_change(conn, date1, date2)
     for stk in largest_change:
         if len(composition) >= num_change:
             break
-        if not stk["id"] in composition: 
-            stk["weight"] = round(pps / stk["price"], 4)
+        if not stk["id"] in ids: 
+            stk["weight"] = pps / stk["price"]
             composition.append(stk)
-    
+            ids.append(stk["id"])
+    print("Change:", len(composition))
     for stk in most_popular:
         if len(composition) >= num_stocks:
             break
-        if not stk["id"] in composition:
-            stk["weight"] = round(pps / stk["price"], 4)
+        if not stk["id"] in ids:
+            stk["weight"] = pps / stk["price"]
             composition.append(stk)
-
+            ids.append(stk["id"])
+    print("Total:", len(composition))
     return composition
 
 def update(conn, data):
@@ -152,7 +155,7 @@ def get_value(conn, date=None):
     return value
 
 def get_composition(conn, date):
-    query = "SELECT * FROM index_data WHERE tm LIKE '{}%' AND NOT weight = 0"
+    query = "SELECT * FROM index_data WHERE tm LIKE '{}%' AND NOT weight = 0".format(date)
     results = []
     with conn:
         data = conn.cursor().execute(query).fetchall()
@@ -165,14 +168,3 @@ def get_composition(conn, date):
                 "weight": row[4]
                 })
         return results
-
-def get_latest_weights(conn, instruments):
-    string = ", ".join("'{}'".format(i) for i in instruments)
-    query = "SELECT * FROM index_data WHERE id IN ({})".format(string)
-    res = []
-    with conn:
-        data = conn.cursor().execute(query).fetchall()
-        for d in data:
-            res.append({"id": d[0], "weight": d[4]})
-    return res
-

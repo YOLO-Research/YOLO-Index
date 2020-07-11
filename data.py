@@ -83,23 +83,27 @@ def process_queue(file, queue):
 
     results = {}
     for res in pop['results']:
-        ins = helper.id_from_url(res["instrument"])
-        if not results.get(ins):
-            results[ins] = {}
-        results[ins]["pop"] = res['num_open_positions']
+        if res is not None:
+            ins = helper.id_from_url(res["instrument"])
+            if not results.get(ins):
+                results[ins] = {}
+            results[ins]["pop"] = res['num_open_positions']
     for res in price:
-        ins = helper.id_from_url(res["instrument"])
-        if not results.get(ins):
-            results[ins] = {}
-        results[ins]["price"] = res["last_trade_price"]
+        if res is not None:
+            ins = helper.id_from_url(res["instrument"])
+            if not results.get(ins):
+                results[ins] = {}
+            results[ins]["price"] = res["last_trade_price"]
     
-    for instrument,res in results.items():
-        if res.get('price'):
-            timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            with sqlite.create_connection(file) as conn:
-                sqlite.index_insert(conn, instrument, timestamp, res['pop'], res['price'], 0)
-        else:
+    bad_keys = []
+    for instrument, res in results.items():
+        if not res.get("price"): 
             print("Failed to fetch price for ", instrument)
+            bad_keys.append(instrument)
+    for k in bad_keys: del results[k]
+
+    with sqlite.create_connection(file) as conn:
+        sqlite.index_insert_many(conn, results)
 
 ######## INDEX FUNCTIONS ########
 
@@ -120,6 +124,12 @@ def collect_index_value(file, time=datetime.now().strftime("%Y-%m-%d %H")):
         value = index.value_index(conn, time)
         sqlite.insert_value(conn, time, value)
 
+def update_weights(file, date=datetime.now()):
+    conn = sqlite.create_connection(file)
+    comp = index.get_composition(conn, date.strftime("%Y-%m-%d 00"))
+    for c in comp:
+        c["tm"] = date.strftime("%Y-%m-%d %H")
+    index.update(conn, comp)
 ######## CSV IMPORT FUNCTIONS ########
 
 def import_csv(directory):
@@ -207,7 +217,11 @@ def main():
             print("Composing Index.")
             collect_index("data.sqlite")
             collect_index_value("data.sqlite")
-            print("Index Composition Complete.")
+            print("Index Composition complete.")
+        else:
+            print("Updating weights.")
+            update_weights("data.sqlite")
+            print("Weights updated.")
 
     ######## TEST CODE ########
 
