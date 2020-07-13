@@ -100,7 +100,6 @@ def compose_index(conn, value, date1, date2):
             stk["weight"] = pps / stk["price"]
             composition.append(stk)
             ids.append(stk["id"])
-    print("Change:", len(composition))
     for stk in most_popular:
         if len(composition) >= num_stocks:
             break
@@ -108,7 +107,6 @@ def compose_index(conn, value, date1, date2):
             stk["weight"] = pps / stk["price"]
             composition.append(stk)
             ids.append(stk["id"])
-    print("Total:", len(composition))
     return composition
 
 def update(conn, data):
@@ -155,6 +153,21 @@ def get_value(conn, date=None):
     return value
 
 def get_composition(conn, date):
+    query = "SELECT * FROM index_data WHERE tm LIKE '{}%' AND NOT weight = 0".format(date)
+    results = []
+    with conn:
+        data = conn.cursor().execute(query).fetchall()
+        for row in data:
+            results.append({
+                "id": row[0],
+                "tm": row[1],
+                "popularity": row[2],
+                "price": row[3],
+                "weight": row[4]
+                })
+        return results
+
+def get_latest_composition(conn, date):
     query = "SELECT * FROM index_data WHERE tm LIKE '{}%' AND NOT weight = 0".format(date)
     results = []
     with conn:
