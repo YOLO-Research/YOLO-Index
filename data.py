@@ -211,20 +211,20 @@ def main():
             print("Collecting data. Expected time: 5 minutes")
             collect_data("instruments.json")
             print("Data collection complete.")
-            print("Valuing Index.")
-            collect_index_value("data.sqlite")
-            print("Index Valued")
 
         # Collect price and popularity data.
         if '2' in sys.argv[1]:
-            print("Composing Index.")
+            print("Composing and valuing Index.")
             collect_index("data.sqlite")
             collect_index_value("data.sqlite")
-            print("Index Composition complete.")
+            print("Index Composition and valuation complete.")
         else:
             print("Updating weights.")
             update_weights("data.sqlite")
             print("Weights updated.")
+            print("Valuing Index.")
+            collect_index_value("data.sqlite")
+            print("Index Valued")
 
     ######## TEST CODE ########
 
