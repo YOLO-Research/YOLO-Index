@@ -129,7 +129,7 @@ def update_weights(file, date=datetime.now()):
     comp = index.get_composition(conn, date.strftime("%Y-%m-%d 00"))
     for c in comp:
         c["tm"] = date.strftime("%Y-%m-%d %H")
-    index.update(conn, comp)
+    index.updates(conn, comp)
 ######## CSV IMPORT FUNCTIONS ########
 
 def import_csv(directory):

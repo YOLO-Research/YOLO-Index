@@ -1,4 +1,5 @@
-import sqlite
+import sqlite3
+from sqlite3 import Error
 
 def sort_by_popularity(conn, date):
     """
@@ -115,8 +116,27 @@ def update(conn, data):
     """
 
     for datum in data:
-        with conn:
-            sqlite.index_update(conn, datum["id"], datum["tm"], datum["weight"])
+        sqlite.index_update(conn, datum["id"], datum["tm"], datum["weight"])
+
+def updates(conn, data):
+    query = "UPDATE index_data SET weight = CASE "
+
+    tm = ""
+    for datum in data:
+        tm = datum['tm']
+        string = "WHEN (id = '" + datum['id'] + "' AND tm LIKE '" + datum['tm'] + "%') THEN " 
+        + str(datum['weight']) + " "
+        query = ''.join([query, string])
+    string = "ELSE weight END WHERE tm LIKE '" + tm + "%';" 
+    query = ''.join([query, string])
+    
+    print(query)
+    with conn:
+        try:
+            c = conn.cursor()
+            c.execute(query)
+        except Error as e:
+            print(e)
 
 def value_index(conn, date):
     """
