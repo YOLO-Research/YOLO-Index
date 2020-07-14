@@ -125,7 +125,7 @@ def updates(conn, data):
     for datum in data:
         tm = datum['tm']
         string = "WHEN (id = '" + datum['id'] + "' AND tm LIKE '" + datum['tm'] + "%') THEN " 
-        + str(datum['weight']) + " "
+        string += str(datum['weight']) + " "
         query = ''.join([query, string])
     string = "ELSE weight END WHERE tm LIKE '" + tm + "%';" 
     query = ''.join([query, string])
