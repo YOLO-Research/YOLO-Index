@@ -226,8 +226,6 @@ def main():
 
     ######## TEST CODE ########
 
-    update_weights("data.sqlite", datetime(2020, 7, 11, 1))
-
     ######## PUT CODE ABOVE ########
     
     dt = datetime.now() - t1
