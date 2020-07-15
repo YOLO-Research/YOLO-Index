@@ -119,6 +119,10 @@ def update(conn, data):
         sqlite.index_update(conn, datum["id"], datum["tm"], datum["weight"])
 
 def updates(conn, data):
+    if len(data) == 0:
+        print("No data to update.")
+        return
+
     query = "UPDATE index_data SET weight = CASE "
 
     tm = ""
@@ -130,7 +134,6 @@ def updates(conn, data):
     string = "ELSE weight END WHERE tm LIKE '" + tm + "%';" 
     query = ''.join([query, string])
     
-    print(query)
     with conn:
         try:
             c = conn.cursor()
