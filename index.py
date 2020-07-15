@@ -1,4 +1,4 @@
-import sqlite3
+import sqlite3, sqlite
 from sqlite3 import Error
 
 def sort_by_popularity(conn, date):
@@ -130,6 +130,7 @@ def updates(conn, data):
     string = "ELSE weight END WHERE tm LIKE '" + tm + "%';" 
     query = ''.join([query, string])
     
+    print(query)
     with conn:
         try:
             c = conn.cursor()

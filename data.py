@@ -6,8 +6,6 @@ import sqlite, index
 import json, csv, time, sys, os
 from datetime import datetime, timedelta
 
-collect = False
-
 def init(db):
     sqlite.create_table(sqlite.create_connection(db))
 
@@ -227,6 +225,8 @@ def main():
             print("Index Valued")
 
     ######## TEST CODE ########
+
+    update_weights("data.sqlite", datetime(2020, 7, 11, 1))
 
     ######## PUT CODE ABOVE ########
     
