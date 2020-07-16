@@ -3,6 +3,17 @@ from robin_stocks import stocks
 from sqlite3 import Error
 from datetime import datetime
 
+def execute(conn, query, params=None):
+    with conn:
+        try:
+            if params is None:
+                res = conn.cursor().execute(query).fetchall()
+            else:
+                res = conn.cursor().execute(query, params).fetchall()
+        except Error as e:
+            print(e)
+    return res
+
 def create_connection(db_file):
     """
     Create a database connection to a SQLite database 
@@ -47,63 +58,45 @@ def index_insert(conn, id, timedate, popularity, price, weight):
     Insert an SQL entry for an id 
     """
 
-    sql_insert = """ INSERT INTO 'index_data' 
+    query = """ INSERT INTO 'index_data' 
                        (id, tm, popularity, price, weight)
                        VALUES (?, ?, ?, ?, ?); 
                 """
-    with conn:
-        try:
-            c = conn.cursor()
-            c.execute(sql_insert, (id, timedate, popularity, price, weight))
-        except Error as e:
-            print(e)
+    
+    execute(conn, query, (id, timedate, popularity, price, weight))
 
 def index_insert_many(conn, data):
-    sql_query = """ INSERT INTO 'index_data' 
+    query = """ INSERT INTO 'index_data' 
                        (id, tm, popularity, price, weight)
                        VALUES """
     if isinstance(data, dict):
         timestamp = "'" + datetime.now().strftime("%Y-%m-%d %H:%M:%S") + "'"
         for instrument, result in data.items():
             items = ["'" + instrument + "'", timestamp, str(result["pop"]), str(result["price"]), str(0)]
-            sql_query += "(" + ', '.join(items) + "), "
+            query += "(" + ', '.join(items) + "), "
 
-        sql_query = sql_query[:-2] + ";"
+        query = query[:-2] + ";"
 
     elif isinstance(data, list):
         pass
-    with conn:
-        try:
-            c = conn.cursor()
-            c.execute(sql_query)
-        except Error as e:
-            print(e)
+
+    execute(conn, query)
 
 def index_update(conn, id, timestamp, weight):
     """
     Update an entry's weight
     """   
-    sql_update = "UPDATE index_data SET weight = ? WHERE id = ? AND tm LIKE '{}%'".format(timestamp)
+    query = "UPDATE index_data SET weight = ? WHERE id = ? AND tm LIKE '{}%'".format(timestamp)
 
-    with conn:
-        try:
-            conn.cursor().execute(sql_update, (weight, id))
-        except Error as e:
-            print(e)
+    execute(conn, query, (weight, id))
 
 def insert_value(conn, timestamp, value):
 
-    sql_insert = "INSERT INTO index_value (tm, value) VALUES (?, ?);"
+    query = "INSERT INTO index_value (tm, value) VALUES (?, ?);"
 
-    with conn:
-        try:
-            conn.cursor().execute(sql_insert, (timestamp, value))
-        except Error as e:
-            print(e)
+    execute(conn, query, (timestamp, value))
 
-def timestamp(year, month, day, hr=0, min=0, sec=0):
-    """ 
-    Generate a formatted timestamp 
-    """
+def get_all_values(conn):
+    query = "SELECT * FROM index_value"
 
-    return datetime.datetime(year, month, day, hr, min, sec).strftime("%Y-%m-%d %H:%M:%S")
+    return execute(conn, query)

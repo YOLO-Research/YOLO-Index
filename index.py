@@ -11,18 +11,19 @@ def sort_by_popularity(conn, date):
     :type date: String "YYYY-MM-DD H:M:S"
     """
     output = []
-    with conn:
-        cursor = conn.cursor()
-        query = "SELECT * FROM index_data WHERE tm LIKE '{}%' ORDER BY popularity desc".format(date)
-        rows = cursor.execute(query).fetchall()
-        for row in rows:
-            output.append({
-                "id": row[0],
-                "tm": row[1],
-                "popularity": row[2],
-                "price": row[3],
-                "weight": row[4]
-                })
+    
+    query = "SELECT * FROM index_data WHERE tm LIKE '{}%' ORDER BY popularity desc".format(date)
+    rows = sqlite.execute(conn, query)
+    
+    for row in rows:
+        output.append({
+            "id": row[0],
+            "tm": row[1],
+            "popularity": row[2],
+            "price": row[3],
+            "weight": row[4]
+            })
+    
     return output
 
 def sort_by_largest_change(conn, date1, date2):
@@ -50,15 +51,6 @@ def sort_by_largest_change(conn, date1, date2):
         except IndexError:
             d["change"] = 0
             d["tm1"] = d["tm"]
-
-    # for d in output:
-    #     try:
-    #         res = next(item for item in d1 if item["id"] == d["id"])
-    #         d["change"] = d["popularity"] - res["popularity"]
-    #         d["tm2"] = res["tm"]
-    #     except StopIteration:
-    #         d["change"] = d["popularity"]
-    #         d["tm2"] = ""
 
     return sorted(output, key=lambda item: item["change"], reverse=True)
 
@@ -134,12 +126,7 @@ def updates(conn, data):
     string = "ELSE weight END WHERE tm LIKE '" + tm + "%';" 
     query = ''.join([query, string])
     
-    with conn:
-        try:
-            c = conn.cursor()
-            c.execute(query)
-        except Error as e:
-            print(e)
+    sqlite.execute(conn, query)
 
 def value_index(conn, date):
     """
@@ -149,15 +136,14 @@ def value_index(conn, date):
     """
 
     query = "SELECT * FROM index_data WHERE tm LIKE '{}%' AND NOT weight=0.0".format(date)
-    with conn:
-        cursor = conn.cursor()
-        data = cursor.execute(query).fetchall()
-        value = 0
-        stocks = []
-        for datum in data:
-            if not datum[0] in stocks:
-                stocks.append(datum[0])
-                value += datum[3] * datum[4]
+    data = sqlite.execute(conn, query)
+ 
+    value = 0
+    stocks = []
+    for datum in data:
+        if not datum[0] in stocks:
+            stocks.append(datum[0])
+            value += datum[3] * datum[4]
 
     return value
 
@@ -167,40 +153,41 @@ def get_value(conn, date=None):
     if date is None:
         query = "SELECT * FROM index_value"
         i = -1
-    with conn:
-        cursor = conn.cursor()
-        data = cursor.execute(query).fetchall()
-        value = 100
-        if len(data) > 0:
-            value = data[i][1]
+    
+    data = sqlite.execute(conn, query)
+    
+    value = 100
+    if len(data) > 0:
+        value = data[i][1]
     return value
 
 def get_composition(conn, date):
     query = "SELECT * FROM index_data WHERE tm LIKE '{}%' AND NOT weight = 0".format(date)
+    data = sqlite.execute(conn, query)
+
     results = []
-    with conn:
-        data = conn.cursor().execute(query).fetchall()
-        for row in data:
-            results.append({
-                "id": row[0],
-                "tm": row[1],
-                "popularity": row[2],
-                "price": row[3],
-                "weight": row[4]
-                })
-        return results
+    for row in data:
+        results.append({
+            "id": row[0],
+            "tm": row[1],
+            "popularity": row[2],
+            "price": row[3],
+            "weight": row[4]
+            })
+    return results
 
 def get_latest_composition(conn, date):
     query = "SELECT * FROM index_data WHERE tm LIKE '{}%' AND NOT weight = 0".format(date)
     results = []
-    with conn:
-        data = conn.cursor().execute(query).fetchall()
-        for row in data:
-            results.append({
-                "id": row[0],
-                "tm": row[1],
-                "popularity": row[2],
-                "price": row[3],
-                "weight": row[4]
-                })
-        return results
+
+    data = sqlite.execute(conn, query)
+
+    for row in data:
+        results.append({
+            "id": row[0],
+            "tm": row[1],
+            "popularity": row[2],
+            "price": row[3],
+            "weight": row[4]
+            })
+    return results

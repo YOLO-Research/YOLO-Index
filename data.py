@@ -6,6 +6,9 @@ import sqlite, index
 import json, csv, time, sys, os
 from datetime import datetime, timedelta
 
+db_file = 'data.sqlite'
+value_export_file = os.getenv('HOME') + "/public_html/values.json"
+
 def init(db):
     sqlite.create_table(sqlite.create_connection(db))
 
@@ -47,10 +50,10 @@ def collect_data(file):
                 queue.append(res["id"])
 
             else:
-                process_queue("data.sqlite", queue)
+                process_queue(db_file, queue)
                 queue = []
 
-        if len(queue) > 0: process_queue("data.sqlite", queue)
+        if len(queue) > 0: process_queue(db_file, queue)
 
 def process_queue(file, queue):
     """
@@ -111,15 +114,12 @@ def collect_index(file,
     with sqlite.create_connection(file) as conn:
         data = index.compose_index(conn, index.get_value(conn), t1, t2)
         index.update(conn, data)
-        s = 0
-        for d in data:
-            s += d["price"] * d["weight"]
-        print(s)
 
 def collect_index_value(file, time=datetime.now().strftime("%Y-%m-%d %H")):
     conn = sqlite.create_connection(file)
     with conn:
         value = index.value_index(conn, time)
+        print(value)
         sqlite.insert_value(conn, time, value)
 
 def update_weights(file, date=datetime.now()):
@@ -128,6 +128,12 @@ def update_weights(file, date=datetime.now()):
     for c in comp:
         c["tm"] = date.strftime("%Y-%m-%d %H")
     index.updates(conn, comp)
+
+def value_to_json(db, file):
+    conn = sqlite.create_connection(db)
+    data = sqlite.get_all_values(conn)
+    with open(file, 'w') as f:
+        f.write(json.dumps(data, indent=2))
 ######## CSV IMPORT FUNCTIONS ########
 
 def import_csv(directory):
@@ -148,13 +154,13 @@ def import_csv(directory):
         else:
             data = read_csv(queue, directory)
             for datum in data:
-                with sqlite.create_connection("data.sqlite") as conn:
+                with sqlite.create_connection(db_file) as conn:
                     sqlite.insert(conn, datum[0], datum[1], datum[2], datum[3])
             queue = []
     if len(queue) > 0:
         data = read_csv(queue, directory)
         for datum in data:
-                with sqlite.create_connection("data.sqlite") as conn:
+                with sqlite.create_connection(db_file) as conn:
                     sqlite.insert(conn, datum[0], datum[1], datum[2], datum[3])
 
 
@@ -197,7 +203,7 @@ def main():
         # Initialize database and collect instruments.
         if '0' in sys.argv[1]:
             print("Initiating database...")
-            init("data.sqlite")
+            init(db_file)
             print("Initialization complete.")
 
             print("Collecting instruments. Expected time: 1 minute")
@@ -212,17 +218,18 @@ def main():
 
         # Collect price and popularity data.
         if '2' in sys.argv[1]:
-            print("Composing and valuing Index.")
-            collect_index("data.sqlite")
-            collect_index_value("data.sqlite")
-            print("Index Composition and valuation complete.")
+            print("Composing Index.")
+            collect_index(db_file)
+            print("Index Composition complete.")
         else:
             print("Updating weights.")
-            update_weights("data.sqlite")
+            update_weights(db_file)
             print("Weights updated.")
-            print("Valuing Index.")
-            collect_index_value("data.sqlite")
-            print("Index Valued")
+
+        print("Valuing Index.")
+        collect_index_value(db_file)
+        value_to_json(db_file, value_export_file)
+        print("Index valuation complete")
 
     ######## TEST CODE ########
 
