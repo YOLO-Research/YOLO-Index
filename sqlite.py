@@ -4,6 +4,7 @@ from sqlite3 import Error
 from datetime import datetime
 
 def execute(conn, query, params=None):
+    res = None
     with conn:
         try:
             if params is None:
@@ -33,14 +34,14 @@ def create_table(conn):
 
     sql_create_table = """ CREATE TABLE IF NOT EXISTS 'index_data' (
                              id integer NOT NULL,
-                             tm datetime NOT NULL,
+                             timestamp timestamp NOT NULL,
                              popularity int NOT NULL,
                              price float NOT NULL,
                              weight float NOT NULL
                         ); 
                         """
     sql_create_value_table = """ CREATE TABLE IF NOT EXISTS 'index_value' (
-                             tm datetime NOT NULL,
+                             timestamp timestamp NOT NULL,
                              value float NOT NULL
                         ); 
                         """

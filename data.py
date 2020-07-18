@@ -134,6 +134,7 @@ def value_to_json(db, file):
     data = sqlite.get_all_values(conn)
     with open(file, 'w') as f:
         f.write(json.dumps(data, indent=2))
+
 ######## CSV IMPORT FUNCTIONS ########
 
 def import_csv(directory):
@@ -190,6 +191,41 @@ def read_csv(symbols, directory):
                     final_data.append((res_id, matches[-1][0], matches[-1][1], float(quote["close_price"])))
     return final_data
 
+def epoch_conversion(db):
+    query_value = [
+    """ALTER TABLE index_value ADD tim timestamp NOT NULL DEFAULT 0""",
+    """UPDATE index_value SET tm = tm || ':00:00'""",
+    """UPDATE index_value SET tim = CAST(strftime('%s', tm) as integer)""",
+    """ALTER TABLE index_value RENAME TO value_old""",
+    """ CREATE TABLE IF NOT EXISTS 'index_value' (
+                             tim timestamp NOT NULL,
+                             value float NOT NULL
+                        ); 
+                        """,
+    """INSERT INTO index_value (tim, value) SELECT tim, value FROM value_old"""
+    ]
+
+    query_data = [
+    """ALTER TABLE index_data ADD tim timestamp NOT NULL DEFAULT 0""",
+    """UPDATE index_data SET tim = CAST(strftime('%s', tm) as integer)""",
+    """ALTER TABLE index_data RENAME TO data_old""",
+    """ CREATE TABLE IF NOT EXISTS 'index_data' (
+                             id integer NOT NULL,
+                             tim timestamp NOT NULL,
+                             popularity int NOT NULL,
+                             price float NOT NULL,
+                             weight float NOT NULL
+                        ); 
+                        """,
+    """INSERT INTO index_data (id, tim, popularity, price, weight) SELECT id, tim, popularity, price, weight FROM data_old"""
+    ]
+
+    conn = sqlite.create_connection(db)
+    for q in query_value:
+        sqlite.execute(conn, q)
+    for q in query_data:
+        sqlite.execute(conn, q)
+
 ######################################
 
 def main():
@@ -232,6 +268,8 @@ def main():
         print("Index valuation complete")
 
     ######## TEST CODE ########
+
+    epoch_conversion('data.sqlite')
 
     ######## PUT CODE ABOVE ########
     
