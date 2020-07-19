@@ -3,11 +3,10 @@ from robin_stocks import stocks, helper, urls, authentication
 import sqlite, index
 
 # system packages
-import json, csv, time, sys, os
+import json, csv, time, sys, os, time
 from datetime import datetime, timedelta
 
 db_file = 'data.sqlite'
-value_export_file = os.getenv('HOME') + "/public_html/values.json"
 
 def init(db):
     sqlite.create_table(sqlite.create_connection(db))
@@ -109,13 +108,13 @@ def process_queue(file, queue):
 ######## INDEX FUNCTIONS ########
 
 def collect_index(file, 
-    t1=(datetime.now() - timedelta(days=7)).strftime("%Y-%m-%d %H"), t2=datetime.now().strftime("%Y-%m-%d %H")):
+    t1=(time.time() - (time.time() % 3600) - 604800), t2=(time.time() - (time.time() % 3600))):
 
     with sqlite.create_connection(file) as conn:
         data = index.compose_index(conn, index.get_value(conn), t1, t2)
         index.update(conn, data)
 
-def collect_index_value(file, time=datetime.now().strftime("%Y-%m-%d %H")):
+def collect_index_value(file, time=(time.time() - (time.time() % 3600))):
     conn = sqlite.create_connection(file)
     with conn:
         value = index.value_index(conn, time)
@@ -124,16 +123,10 @@ def collect_index_value(file, time=datetime.now().strftime("%Y-%m-%d %H")):
 
 def update_weights(file, date=datetime.now()):
     conn = sqlite.create_connection(file)
-    comp = index.get_composition(conn, date.strftime("%Y-%m-%d 00"))
+    comp = index.get_composition(conn, date - (time.time() % 604800))
     for c in comp:
-        c["tm"] = date.strftime("%Y-%m-%d %H")
+        c["tim"] = date
     index.updates(conn, comp)
-
-def value_to_json(db, file):
-    conn = sqlite.create_connection(db)
-    data = sqlite.get_all_values(conn)
-    with open(file, 'w') as f:
-        f.write(json.dumps(data, indent=2))
 
 ######## CSV IMPORT FUNCTIONS ########
 
@@ -195,7 +188,7 @@ def epoch_conversion(db):
     query_value = [
     """ALTER TABLE index_value ADD tim timestamp NOT NULL DEFAULT 0""",
     """UPDATE index_value SET tm = tm || ':00:00'""",
-    """UPDATE index_value SET tim = CAST(strftime('%s', tm) as integer)""",
+    """UPDATE index_value SET tim = CAST(strftime('%s', tm, 'utc') as integer)""",
     """ALTER TABLE index_value RENAME TO value_old""",
     """ CREATE TABLE IF NOT EXISTS 'index_value' (
                              tim timestamp NOT NULL,
@@ -207,7 +200,7 @@ def epoch_conversion(db):
 
     query_data = [
     """ALTER TABLE index_data ADD tim timestamp NOT NULL DEFAULT 0""",
-    """UPDATE index_data SET tim = CAST(strftime('%s', tm) as integer)""",
+    """UPDATE index_data SET tim = CAST(strftime('%s', tm, 'utc') as integer)""",
     """ALTER TABLE index_data RENAME TO data_old""",
     """ CREATE TABLE IF NOT EXISTS 'index_data' (
                              id integer NOT NULL,
@@ -217,7 +210,8 @@ def epoch_conversion(db):
                              weight float NOT NULL
                         ); 
                         """,
-    """INSERT INTO index_data (id, tim, popularity, price, weight) SELECT id, tim, popularity, price, weight FROM data_old"""
+    """INSERT INTO index_data (id, tim, popularity, price, weight) 
+    SELECT id, tim, popularity, price, weight FROM data_old"""
     ]
 
     conn = sqlite.create_connection(db)
@@ -231,7 +225,7 @@ def epoch_conversion(db):
 def main():
     
     print("Beginning execution...")
-    t1 = datetime.now()
+    t1 = time.time()
 
     ######## PUT CODE BELOW ########
 
@@ -264,17 +258,16 @@ def main():
 
         print("Valuing Index.")
         collect_index_value(db_file)
-        value_to_json(db_file, value_export_file)
         print("Index valuation complete")
 
     ######## TEST CODE ########
 
-    epoch_conversion('data.sqlite')
-
     ######## PUT CODE ABOVE ########
     
-    dt = datetime.now() - t1
-    print("Execution lasted", (datetime.min + dt).strftime("%H hours %M minutes %S seconds."))
+    dt = round(time.time() - t1)
+    m, s = divmod(dt, 60)
+    h, m = divmod(m, 60)
+    print("Execution lasted", h, "hours", m, "minutes", s, "seconds.")
 
 if __name__ == '__main__':
     main()

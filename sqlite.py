@@ -1,7 +1,6 @@
-import sqlite3, datetime
+import sqlite3, time
 from robin_stocks import stocks
 from sqlite3 import Error
-from datetime import datetime
 
 def execute(conn, query, params=None):
     res = None
@@ -60,7 +59,7 @@ def index_insert(conn, id, timedate, popularity, price, weight):
     """
 
     query = """ INSERT INTO 'index_data' 
-                       (id, tm, popularity, price, weight)
+                       (id, tim, popularity, price, weight)
                        VALUES (?, ?, ?, ?, ?); 
                 """
     
@@ -68,12 +67,12 @@ def index_insert(conn, id, timedate, popularity, price, weight):
 
 def index_insert_many(conn, data):
     query = """ INSERT INTO 'index_data' 
-                       (id, tm, popularity, price, weight)
+                       (id, tim, popularity, price, weight)
                        VALUES """
     if isinstance(data, dict):
-        timestamp = "'" + datetime.now().strftime("%Y-%m-%d %H:%M:%S") + "'"
+        timestamp = time.time()
         for instrument, result in data.items():
-            items = ["'" + instrument + "'", timestamp, str(result["pop"]), str(result["price"]), str(0)]
+            items = ["'" + instrument + "'", str(timestamp), str(result["pop"]), str(result["price"]), str(0)]
             query += "(" + ', '.join(items) + "), "
 
         query = query[:-2] + ";"
@@ -87,13 +86,17 @@ def index_update(conn, id, timestamp, weight):
     """
     Update an entry's weight
     """   
-    query = "UPDATE index_data SET weight = ? WHERE id = ? AND tm LIKE '{}%'".format(timestamp)
+
+    tim1 = timestamp - (timestamp % 86400)
+    tim2 = timestamp - (timestamp % -86400)
+
+    query = "UPDATE index_data SET weight = ? WHERE id = ? AND tim BETWEEN {} AND {}".format(tim1, tim2)
 
     execute(conn, query, (weight, id))
 
 def insert_value(conn, timestamp, value):
 
-    query = "INSERT INTO index_value (tm, value) VALUES (?, ?);"
+    query = "INSERT INTO index_value (tim, value) VALUES (?, ?);"
 
     execute(conn, query, (timestamp, value))
 
