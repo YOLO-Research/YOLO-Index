@@ -33,14 +33,14 @@ def create_table(conn):
 
     sql_create_table = """ CREATE TABLE IF NOT EXISTS 'index_data' (
                              id integer NOT NULL,
-                             timestamp timestamp NOT NULL,
+                             tim timestamp NOT NULL,
                              popularity int NOT NULL,
                              price float NOT NULL,
                              weight float NOT NULL
                         ); 
                         """
     sql_create_value_table = """ CREATE TABLE IF NOT EXISTS 'index_value' (
-                             timestamp timestamp NOT NULL,
+                             tim timestamp NOT NULL,
                              value float NOT NULL
                         ); 
                         """
@@ -53,7 +53,7 @@ def create_table(conn):
         except Error as e:
             print(e)
 
-def index_insert(conn, id, timedate, popularity, price, weight):
+def index_insert(conn, id, timestamp, popularity, price, weight):
     """
     Insert an SQL entry for an id 
     """
@@ -63,7 +63,7 @@ def index_insert(conn, id, timedate, popularity, price, weight):
                        VALUES (?, ?, ?, ?, ?); 
                 """
     
-    execute(conn, query, (id, timedate, popularity, price, weight))
+    execute(conn, query, (id, timestamp, popularity, price, weight))
 
 def index_insert_many(conn, data):
     query = """ INSERT INTO 'index_data' 
@@ -98,7 +98,7 @@ def insert_value(conn, timestamp, value):
 
     query = "INSERT INTO index_value (tim, value) VALUES (?, ?);"
 
-    execute(conn, query, (timestamp, value))
+    execute(conn, query, (int(timestamp), value))
 
 def get_all_values(conn):
     query = "SELECT * FROM index_value"
