@@ -127,7 +127,7 @@ def updates(conn, data):
         tim1 = tim - (tim % 86400)
         tim2 = tim - (tim % -86400)
 
-        string = "WHEN (id = '" + datum['id'] + "' AND tim BETWEEN {} AND {}) THEN ".format(tim1, tim2)
+        string = "WHEN (id = '" + datum['id'] + "') THEN "
         string += str(datum['weight']) + " "
         query = ''.join([query, string])
     string = "ELSE weight END WHERE tim BETWEEN {} AND {};".format(tim1, tim2) 

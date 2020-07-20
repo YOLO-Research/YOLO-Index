@@ -70,7 +70,7 @@ def index_insert_many(conn, data):
                        (id, tim, popularity, price, weight)
                        VALUES """
     if isinstance(data, dict):
-        timestamp = time.time()
+        timestamp = round(time.time())
         for instrument, result in data.items():
             items = ["'" + instrument + "'", str(timestamp), str(result["pop"]), str(result["price"]), str(0)]
             query += "(" + ', '.join(items) + "), "
