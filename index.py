@@ -1,14 +1,59 @@
 import sqlite3, sqlite
 from sqlite3 import Error
 
+def collect_index(file, 
+    t1=(time.time() - (time.time() % 3600) - 604800), t2=(time.time() - (time.time() % 3600))):
+    """
+    Compose the index and set weights in the SQLite DB
+    
+    :param t1: Earlier Unix Epoch
+    :type t1: Unix Epoch
+    :param t2: Later Unix Epoch
+    :type t2: Unix Epoch
+    """
+    with sqlite.create_connection(file) as conn:
+        data = compose_index(conn, get_value(conn), t1, t2)
+        update(conn, data)
+
+def collect_index_value(file, time=time.time()):
+    """
+    Value the index given a time
+    
+    :param file: Database file
+    :type file: SQLite Database file
+    :param time: Unix Epoch
+    :type time: integer
+    """
+    conn = sqlite.create_connection(file)
+    with conn:
+        value = value_index(conn, time)
+        print(value)
+        sqlite.insert_value(conn, time, value)
+
+def update_weights(file, date=time.time()):
+    """
+    Update the latest stock weights using the day's composition 
+    
+    :param file: Database file
+    :type file: SQLite Database file
+    :param time: Unix Epoch
+    :type time: integer
+    """
+    conn = sqlite.create_connection(file)
+    comp = get_composition(conn, date - (date % 86400))
+    for c in comp:
+        c["tim"] = date
+    updates(conn, comp)
+
 def sort_by_popularity(conn, date):
     """
     Calculate and sort stock popularity at date. 
     Returns a sorted list of dictionaries containing {id, time, popularity, price}
+    
     :param conn: SQLite Connection
     :type conn: SQLite Connection
     :param date: Unix Epoch
-    :type date: Unix Epoch
+    :type date: integer
     """
     output = []
     
@@ -33,6 +78,7 @@ def sort_by_largest_change(conn, date1, date2):
     """
     Calculate and sort the largest changes in popularity between date1 and date2.
     Returns a dictionary such that "{id}" : {popularity}
+    
     :param conn: SQLite Connection
     :type conn: SQLite Connection
     :param date1: Earlier date
@@ -40,7 +86,6 @@ def sort_by_largest_change(conn, date1, date2):
     :param date2: Later date
     :type date2: Unix Epoch
     """
-
     d1 = sort_by_popularity(conn, date1)
     d2 = sort_by_popularity(conn, date2)
 
@@ -61,6 +106,7 @@ def compose_index(conn, value, date1, date2):
     """
     Composes the index stocks
     Returns a dictionary such that "{id}" : {share_weight}
+    
     :param conn: SQLite Connection
     :type conn: SQLite Connection
     :param value: Total value of index
@@ -107,7 +153,12 @@ def compose_index(conn, value, date1, date2):
 
 def update(conn, data):
     """
-    Update the index table
+    Update the weights in the index_data table
+
+    :param conn: SQLite Connection
+    :type conn: SQLite Connection
+    :param data: Array of weights to be updated 
+    :type data: Array of Dictionaries {id: _, tim: _, weight: _}
     """
 
     for datum in data:
@@ -138,8 +189,11 @@ def updates(conn, data):
 def value_index(conn, date):
     """
     Value the index at a given date, assuring no stock is repeated
-    :param conn: SQL Connection
+    
+    :param conn: SQLite database Connection
+    :type conn: SQLite Connection
     :param date: Unix Epcoh
+    :type date: integer 
     """
     tim1 = date - (date % 3600)
     tim2 = tim1 + 3600
@@ -159,8 +213,10 @@ def value_index(conn, date):
 def get_value(conn, date=None):
     """
     Get the value of the index at a given time
-    :param conn: SQL Connection
+    :param conn: SQLite database Connection
+    :type conn: SQLite database connection
     :param date: Unix Epoch
+    :type date: integer
     """
     i = -1
     query = "SELECT * FROM index_value"
@@ -181,10 +237,12 @@ def get_value(conn, date=None):
 def get_composition(conn, date):
     """
     Return the index composition at a time
-    :param conn: SQL Connection
-    :param date: Unix Epoch
-    """
 
+    :param conn: SQLite database Connection
+    :type conn: SQLite database connection
+    :param date: Unix Epoch
+    :type date: integer
+    """
     tim1 = date - (date % 3600)
     tim2 = tim1 + 3600
 

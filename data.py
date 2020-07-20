@@ -16,7 +16,7 @@ def collect_instruments(file):
     Estimated Time (1 minute)
 
     :param file: json file path
-    :type file_path: str
+    :type file_path: string
     """
 
     results = stocks.get_instruments()
@@ -32,7 +32,7 @@ def collect_data(file):
     Estimated Time (5 minutes)
 
     :param file: json file path
-    :type file_path: str
+    :type file: string
     """
     cooldown = 1
     with open(file, "r") as f:
@@ -56,6 +56,9 @@ def collect_data(file):
 def process_queue(file, queue):
     """
     Process a queue of stock ids by fetching recent price and popularity data
+    
+    :param file: SQLite database file path
+    :type file: string
     :param queue: queue of ids to be processed
     :type queue: list
     """
@@ -104,29 +107,6 @@ def process_queue(file, queue):
     with sqlite.create_connection(file) as conn:
         sqlite.index_insert_many(conn, results)
 
-######## INDEX FUNCTIONS ########
-
-def collect_index(file, 
-    t1=(time.time() - (time.time() % 3600) - 604800), t2=(time.time() - (time.time() % 3600))):
-
-    with sqlite.create_connection(file) as conn:
-        data = index.compose_index(conn, index.get_value(conn), t1, t2)
-        index.update(conn, data)
-
-def collect_index_value(file, time=(time.time() - (time.time() % 3600))):
-    conn = sqlite.create_connection(file)
-    with conn:
-        value = index.value_index(conn, time)
-        print(value)
-        sqlite.insert_value(conn, time, value)
-
-def update_weights(file, date=time.time()):
-    conn = sqlite.create_connection(file)
-    comp = index.get_composition(conn, date - (date % 86400))
-    for c in comp:
-        c["tim"] = date
-    index.updates(conn, comp)
-
 ######################################
 
 def main():
@@ -153,18 +133,19 @@ def main():
             collect_data("instruments.json")
             print("Data collection complete.")
 
-        # Collect price and popularity data.
+        # Compose the index or update weights
         if '2' in sys.argv[1]:
             print("Composing Index.")
-            collect_index(db_file)
+            index.collect_index(db_file)
             print("Index Composition complete.")
         else:
             print("Updating weights.")
-            update_weights(db_file)
+            index.update_weights(db_file)
             print("Weights updated.")
 
+        # Collect the value of the index        
         print("Valuing Index.")
-        collect_index_value(db_file)
+        index.collect_index_value(db_file)
         print("Index valuation complete")
 
     ######## TEST CODE ########
