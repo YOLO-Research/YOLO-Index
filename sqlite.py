@@ -88,7 +88,7 @@ def index_update(conn, id, timestamp, weight):
     """   
 
     tim1 = timestamp - (timestamp % 86400)
-    tim2 = timestamp - (timestamp % -86400)
+    tim2 = tim1 + 86400
 
     query = "UPDATE index_data SET weight = ? WHERE id = ? AND tim BETWEEN {} AND {}".format(tim1, tim2)
 
