@@ -123,7 +123,7 @@ def collect_index_value(file, time=(time.time() - (time.time() % 3600))):
 
 def update_weights(file, date=time.time()):
     conn = sqlite.create_connection(file)
-    comp = index.get_composition(conn, date - (date % 604800))
+    comp = index.get_composition(conn, date)
     for c in comp:
         c["tim"] = date
     index.updates(conn, comp)
