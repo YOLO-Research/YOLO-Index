@@ -1,4 +1,8 @@
-import sqlite3, sqlite
+# my packages
+import sqlite
+
+# system packages
+import sqlite3, time
 from sqlite3 import Error
 
 def collect_index(file, 
