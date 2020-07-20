@@ -12,8 +12,8 @@ def sort_by_popularity(conn, date):
     """
     output = []
     
-    tim1 = date - (date % 86400)
-    tim2 = tim1 + 86400
+    tim1 = date - (date % 3600)
+    tim2 = tim1 + 3600
 
     query = "SELECT * FROM index_data WHERE tim BETWEEN {} AND {} ORDER BY popularity desc".format(tim1, tim2)
     rows = sqlite.execute(conn, query)
@@ -124,8 +124,8 @@ def updates(conn, data):
     for datum in data:
         tim = datum['tim']
 
-        tim1 = tim - (tim % 86400)
-        tim2 = tim1 + 86400
+        tim1 = tim - (tim % 3600)
+        tim2 = tim1 + 3600
 
         string = "WHEN (id = '" + datum['id'] + "') THEN "
         string += str(datum['weight']) + " "
@@ -141,8 +141,8 @@ def value_index(conn, date):
     :param conn: SQL Connection
     :param date: Unix Epcoh
     """
-    tim1 = date - (date % 86400)
-    tim2 = tim1 + 86400
+    tim1 = date - (date % 3600)
+    tim2 = tim1 + 3600
 
     query = "SELECT * FROM index_data WHERE tim BETWEEN {} AND {} AND weight != 0".format(tim1, tim2)
     data = sqlite.execute(conn, query)
@@ -167,8 +167,8 @@ def get_value(conn, date=None):
 
     if date is not None:
         i = 0
-        tim1 = date - (date % 86400)
-        tim2 = tim1 + 86400
+        tim1 = date - (date % 3600)
+        tim2 = tim1 + 3600
         query = "SELECT * FROM index_value WHERE tim BETWEEN {} AND {}".format(tim1, tim2)
     
     data = sqlite.execute(conn, query)
@@ -185,8 +185,8 @@ def get_composition(conn, date):
     :param date: Unix Epoch
     """
 
-    tim1 = date - (date % 86400)
-    tim2 = tim1 + 86400
+    tim1 = date - (date % 3600)
+    tim2 = tim1 + 3600
 
     query = "SELECT * FROM index_data WHERE tim BETWEEN {} AND {} AND NOT weight = 0".format(tim1, tim2)
     data = sqlite.execute(conn, query)
