@@ -101,9 +101,6 @@ def get_quotes_by_ids(inputIds, info=None, errors=True):
 
     data = [item for item in data if item is not None]
 
-    if len(data) == 1:
-        return data[0]
-
     return(helper.filter(data, info))
 
 

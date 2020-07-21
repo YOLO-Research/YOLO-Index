@@ -1,6 +1,6 @@
 # my packages
 from robin_stocks import stocks, helper, authentication
-import sqlite, index
+import sqlite, index, html
 
 # system packages
 import json, time, sys, os, time
@@ -62,10 +62,9 @@ def process_queue(file, queue):
     :param queue: queue of ids to be processed
     :type queue: list
     """
-    pop = stocks.get_popularity_by_ids(queue, errors=False)
     authentication.login(username=os.environ.get("ROBIN_USER"), password=os.environ.get("ROBIN_PASS"))
+    pop = stocks.get_popularity_by_ids(queue, errors=False)
     price = stocks.get_quotes_by_ids(queue, errors=False)
-
     while pop.get("detail") or price[0].get("detail"):
 
         if pop.get("detail"):
