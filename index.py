@@ -44,7 +44,7 @@ def update_weights(file, date=time.time()):
     :type time: integer
     """
     conn = sqlite.create_connection(file)
-    comp = get_composition(conn, date - (date % 86400))
+    comp = get_composition(conn, date - (date % 86400) + 14400)
     for c in comp:
         c["tim"] = date
     updates(conn, comp)
@@ -237,6 +237,22 @@ def get_value(conn, date=None):
     if len(data) > 0:
         value = data[i][1]
     return value
+
+def get_values(conn, tim1, tim2):
+    """
+    Get all index values between tim1 and tim2
+    :param conn: SQLite database Connection
+    :type conn: SQLite database connection
+    :param tim1: Earlier Unix Epoch
+    :type tim1: integer
+    :param tim2: Earlier Unix Epoch
+    :type tim2: integer
+    """
+    query = "SELECT * FROM index_value WHERE tim BETWEEN {} AND {}".format(tim1, tim2)
+    
+    data = sqlite.execute(conn, query)
+    
+    return data
 
 def get_composition(conn, date):
     """
