@@ -4,7 +4,6 @@ from robin_stocks import stocks
 
 # system packages
 import time, os, json
-from decimal import *
 from datetime import datetime
 from jinja2 import Environment, FileSystemLoader
 
@@ -55,7 +54,7 @@ def generate_template(db_file, tim=time.time()):
                 p_html = "<td style='color: #bbb;'>{:. 2f}%</td>".format(p_change)
                 v_html = "<td style='color: #bbb;'>{:. 2f}</td>".format(v_change)
 
-            stock_data.append((ticker, '{:. 2f}'.format(i['price']), '{:. 2f}'.format(i['price2']), p_html, v_html))
+            stock_data.append((ticker, '{:.2f}'.format(i['price']), '{:.2f}'.format(i['price2']), p_html, v_html))
 
     output = template.render(date=date, data=json.dumps(data), labels=labels, stocks=stock_data)
 
