@@ -43,21 +43,20 @@ def generate_template(db_file, tim=time.time()):
         if i.get("price2"):
             ticker = stocks.get_instrument_by_id(i.get('id'))['symbol']
             p_change = round(100 * (i['price2'] - i['price']) / i['price'], 2)
-            v_change = Decimal((i['price2'] * i['weight']) - (i['price'] * i['weight']
-                )).quantize(Decimal('.01'), rounding=ROUND_HALF_UP)
+            v_change = (i['price2'] * i['weight']) - (i['price'] * i['weight'])
             p_html = ""
             v_html = ""
             if p_change > 0:
-                p_html = "<td style='color: #84ff63;'>{}%</td>".format(p_change)
-                v_html = "<td style='color: #84ff63;'>{}</td>".format(v_change)
+                p_html = "<td style='color: #84ff63;'>{:. 2f}%</td>".format(p_change)
+                v_html = "<td style='color: #84ff63;'>{:. 2f}</td>".format(v_change)
             elif p_change < 0:
-                p_html = "<td style='color: #ff6384;'>{}%</td>".format(p_change)
-                v_html = "<td style='color: #ff6384;'>{}</td>".format(v_change)
+                p_html = "<td style='color: #ff6384;'>{:. 2f}%</td>".format(p_change)
+                v_html = "<td style='color: #ff6384;'>{:. 2f}</td>".format(v_change)
             else:
-                p_html = "<td style='color: #bbb;'>{}%</td>".format(p_change)
-                v_html = "<td style='color: #bbb;'>{}</td>".format(v_change)
+                p_html = "<td style='color: #bbb;'>{:. 2f}%</td>".format(p_change)
+                v_html = "<td style='color: #bbb;'>{:. 2f}</td>".format(v_change)
 
-            stock_data.append((ticker, i['price'], i['price2'], p_html, v_html))
+            stock_data.append((ticker, '{:. 2f}'.format(i['price']), '{:. 2f}'.format(i['price2']), p_html, v_html))
 
     output = template.render(date=date, data=json.dumps(data), labels=labels, stocks=stock_data)
 
