@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>YOLO Index: {{ date }}</title>
+	<script src="Chart.bundle.js"></script>
+</head>
+<body>
+	<h1>YOLO Index: {{date}}</h1>
+	<div class="wrapper">
+		<canvas id="lineChart"></canvas>
+	</div>
+	<div id="table" class="wrapper">
+		<table>
+			<tr>
+				<th>Stock</th>
+				<th>Start Value</th>
+				<th>End Value</th>
+				<th>% Change</th>
+				<th>$ Change</th>
+			</tr>
+			{% for t, s, e, p, v in stocks %}
+			<tr>
+				<td><a href="https://finance.yahoo.com/quote/{{ t }}">{{ t }}</a></td>
+				<td>${{ s }}</td>
+				<td>${{ e }}</td>
+				{{ p }}
+				{{ v }}
+			</tr>
+			{% endfor %}
+		</table>
+	</div>
+	<script type="text/javascript">
+		var ctx = document.getElementById('lineChart');
+		var l = {{ labels }}
+		var lineChart = new Chart(ctx, {
+			type: 'line',
+			data: {
+				labels: l,
+				datasets: [{
+					label: 'Index Value',
+					backgroundColor: "rgba(99,132,255,0.2)",
+					borderColor: "rgba(99,132,255,1)",
+					borderWidth: 2,
+					hoverBackgroundColor: "rgba(99,132,255,0.4)",
+					hoverBorderColor: "rgba(99,132,255,1)",
+					data: {{ data }},
+				}]
+			},
+			options: {
+				legend: {
+		            labels: {
+                // This more specific font property overrides the global property
+        	        fontColor: '#bbb'
+            		}
+        		},
+				// defaultFontColor: "#333";
+				maintainAspectRatio: false,
+				scales: {
+					xAxes: [{
+						type: 'time',
+						time: {
+							unit: 'minute'
+						},
+						ticks: {
+							maxTicksLimit: l.length,
+							fontColor: "#bbb"
+						},
+						gridLines: {
+							color: "rgba(99,132,255,0.2)"
+						}
+					}],
+					yAxes: [{
+						type: 'linear',
+						ticks: {
+							fontColor: "#bbb",
+							stepSize: .05,
+							fontSize: 10,
+							autoSkip: true,
+							autoSkipPadding: 30,
+							maxRotation: 0
+						},
+						gridLines: {
+							color: "rgba(99,132,255,0.2)"
+						}
+					}]
+
+				}
+			}
+		});
+	</script>
+	<style type="text/css">
+		h1 {
+			color: #bbb;
+			text-align: center;
+		}
+		body {  
+			background: #1D1F20;
+		}
+		a {
+  			color: inherit; /* blue colors for links too */
+  			text-decoration: inherit; /* no underline */
+		}
+		a:hover {
+  			filter: brightness(80%);
+		}
+		#table {
+			color: #bbb !important;
+			text-align: center;
+			font-weight: bold;
+			padding: 16px;
+			display: flex;
+			justify-content: center;
+		}
+		th { 
+			color: rgba(99,132,255,0.8);
+		}
+		table { 
+			height: 40vh;
+			overflow-y:scroll;
+			display:block; 
+			border-collapse: collapse;
+		}
+		th, td {
+			border: 1px solid #bbb;
+			padding: 5px;
+		}
+		.wrapper {
+			position: relative;
+			margin: auto;
+			height: 40vh;
+			width: 50vw;
+		}
+	</style>
+</body>
+</html>

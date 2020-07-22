@@ -146,6 +146,9 @@ def main():
         print("Valuing Index.")
         index.collect_index_value(db_file)
         print("Index valuation complete")
+        print("Generating HTML.")
+        html.generate_template(db_file)
+        print("Generated HTML.")
 
     ######## TEST CODE ########
 
