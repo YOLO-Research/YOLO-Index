@@ -8,8 +8,7 @@ from decimal import *
 from datetime import datetime
 from jinja2 import Environment, FileSystemLoader
 
-# output_dir = os.environ.get("HOME") + "/public_html/reports"
-output_dir = 'output'
+output_dir = os.environ.get("HOME") + "/public_html/reports"
 
 def generate_template(db_file, tim=time.time()):
     date = datetime.fromtimestamp(tim).strftime("%m-%d-%Y")
