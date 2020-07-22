@@ -7,7 +7,7 @@ import time, os, json
 from datetime import datetime
 from jinja2 import Environment, FileSystemLoader
 
-output_dir = 'output'
+output_dir = os.environ.get("HOME") + "/public_html/reports"
 
 def generate_template(db_file, tim=time.time()):
     date = datetime.fromtimestamp(tim - 14400).strftime("%m-%d-%Y")
@@ -49,11 +49,6 @@ def generate_template(db_file, tim=time.time()):
             stock_data.append((s, index_1[i]['price'], index_2[i]['price'], p_html, v_html))
 
     output = template.render(date=date, data=json.dumps(data), labels=labels, stocks=stock_data)
-
-    try:
-        os.mkdir(output_dir)
-    except FileExistsError:
-        pass
 
     with open(output_dir + '/' + date + ".html", 'w') as f:
         f.write(output)
