@@ -18,7 +18,7 @@ def generate_template(db_file, tim=time.time()):
     template = env.get_template('template.html')
 
     tim1 = tim - ((tim - 14400) % 86400) + 9*3600
-    tim2 = min(tim, tim1 + 86400) - 7*3600
+    tim2 = min(tim, tim1 + 86400 - 7*3600) 
 
     conn = sqlite.create_connection(db_file)
     values = index.get_values(conn, tim1, tim2)
