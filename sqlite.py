@@ -72,7 +72,7 @@ def index_insert_many(conn, data):
     if isinstance(data, dict):
         timestamp = round(time.time())
         for instrument, result in data.items():
-            items = ["'" + instrument + "'", str(timestamp), str(result["pop"]), str(result["price"]), str(0)]
+            items = ["'" + instrument + "'", str(timestamp), str(result["pop"]), str(round(result["price"], 2)), str(0)]
             query += "(" + ', '.join(items) + "), "
 
         query = query[:-2] + ";"
