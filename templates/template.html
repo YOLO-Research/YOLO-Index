@@ -18,9 +18,9 @@
 				<th>% Change</th>
 				<th>$ Change</th>
 			</tr>
-			{% for t, s, e, p, v in stocks %}
+			{% for ticker, s, e, p, v in stocks %}
 			<tr>
-				<td><a href="https://finance.yahoo.com/quote/{{ t }}">{{ t }}</a></td>
+				<td><a href="https://finance.yahoo.com/quote/{{ ticker }}">{{ ticker }}</a></td>
 				<td>${{ s }}</td>
 				<td>${{ e }}</td>
 				{{ p }}

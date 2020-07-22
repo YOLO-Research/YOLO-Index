@@ -152,6 +152,8 @@ def main():
 
     ######## TEST CODE ########
 
+    html.generate_template(db_file, 1594958340)
+
     ######## PUT CODE ABOVE ########
     
     dt = round(time.time() - t1)
