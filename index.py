@@ -16,9 +16,7 @@ def collect_index(file,
     :type t2: Unix Epoch
     """
     with sqlite.create_connection(file) as conn:
-        value = get_value(conn)
-        print(value)
-        data = compose_index(conn, value, t1, t2)
+        data = compose_index(conn, get_value(conn), t1, t2)
         updates(conn, data)
 
 def collect_index_value(file, time=time.time()):
@@ -155,7 +153,6 @@ def compose_index(conn, value, date1, date2):
             stk["weight"] = pps / stk["price"]
             composition.append(stk)
             ids.append(stk["id"])
-    print(composition)
     return composition
 
 def update(conn, data):
