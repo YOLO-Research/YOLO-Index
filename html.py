@@ -45,14 +45,14 @@ def generate_template(db_file, tim=time.time()):
             p_html = ""
             v_html = ""
             if p_change > 0:
-                p_html = "<td style='color: #84ff63;'>{:. 2f}%</td>".format(p_change)
-                v_html = "<td style='color: #84ff63;'>{:. 2f}</td>".format(v_change)
+                p_html = "<td style='color: #84ff63;'>{:.2f}%</td>".format(p_change)
+                v_html = "<td style='color: #84ff63;'>{:.2f}</td>".format(v_change)
             elif p_change < 0:
-                p_html = "<td style='color: #ff6384;'>{:. 2f}%</td>".format(p_change)
-                v_html = "<td style='color: #ff6384;'>{:. 2f}</td>".format(v_change)
+                p_html = "<td style='color: #ff6384;'>{:.2f}%</td>".format(p_change)
+                v_html = "<td style='color: #ff6384;'>{:.2f}</td>".format(v_change)
             else:
-                p_html = "<td style='color: #bbb;'>{:. 2f}%</td>".format(p_change)
-                v_html = "<td style='color: #bbb;'>{:. 2f}</td>".format(v_change)
+                p_html = "<td style='color: #bbb;'>{:.2f}%</td>".format(p_change)
+                v_html = "<td style='color: #bbb;'>{:.2f}</td>".format(v_change)
 
             stock_data.append((ticker, '{:.2f}'.format(i['price']), '{:.2f}'.format(i['price2']), p_html, v_html))
 
