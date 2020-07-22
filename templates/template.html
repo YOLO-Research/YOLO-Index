@@ -6,6 +6,10 @@
 </head>
 <body>
 	<h1>YOLO Index: {{date}}</h1>
+	<div style="display: flex; justify-content: center;">
+	<h2 class="number" val="{{ day_change[0] }}">{{ day_change[0] }}</h2>
+	<h2 class="number" val="{{ day_change[1] }}">{{ day_change[1] }}%</h2>
+	</div>
 	<div class="wrapper">
 		<canvas id="lineChart"></canvas>
 	</div>
@@ -23,8 +27,8 @@
 				<td><a href="https://finance.yahoo.com/quote/{{ ticker }}">{{ ticker }}</a></td>
 				<td>${{ s }}</td>
 				<td>${{ e }}</td>
-				{{ p }}
-				{{ v }}
+				<td class="number" val="{{ p }}">{{ p }}</td>
+				<td class="number" val="{{ v }}">{{ v }}</td>
 			</tr>
 			{% endfor %}
 		</table>
@@ -63,6 +67,8 @@
 						},
 						ticks: {
 							maxTicksLimit: l.length,
+							autoSkip: true,
+							maxRotation: 0,
 							fontColor: "#bbb"
 						},
 						gridLines: {
@@ -89,7 +95,18 @@
 		});
 	</script>
 	<style type="text/css">
-		h1 {
+		.number[val*= "+"] {
+			color: #84ff63;
+		}
+		.number[val *= "-"] {
+			color: #ff6384;
+		}
+		h2 {
+			display: inline-block;
+			padding-left: 10px;
+			padding-right: 10px;
+		}
+		h1, h2 {
 			color: #bbb;
 			text-align: center;
 		}
