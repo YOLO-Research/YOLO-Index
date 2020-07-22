@@ -45,6 +45,7 @@ def update_weights(file, date=time.time()):
     """
     conn = sqlite.create_connection(file)
     comp = get_composition(conn, date - (date % 86400) + 14400)
+    print(date - (date % 86400) + 14400)
     for c in comp:
         c["tim"] = date
     updates(conn, comp)
