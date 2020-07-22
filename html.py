@@ -10,7 +10,7 @@ from jinja2 import Environment, FileSystemLoader
 output_dir = os.environ.get("HOME") + "/public_html/reports"
 
 def generate_template(db_file, tim=time.time()):
-    date = datetime.fromtimestamp(tim - 14400).strftime("%m-%d-%Y")
+    date = datetime.fromtimestamp(tim).strftime("%m-%d-%Y")
     labels = []
     data = []
     stock_data = []
@@ -18,8 +18,7 @@ def generate_template(db_file, tim=time.time()):
     template = env.get_template('template.html')
 
     tim1 = tim - ((tim - 14400) % 86400)
-    tim2 = (tim1 + 86400 - 1)
-    if tim2 > tim: tim2 = tim
+    tim2 = min(tim, tim1 + 86400 - 1)
 
     conn = sqlite.create_connection(db_file)
     with conn:
