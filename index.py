@@ -17,7 +17,7 @@ def collect_index(file,
     """
     with sqlite.create_connection(file) as conn:
         data = compose_index(conn, get_value(conn), t1, t2)
-        update(conn, data)
+        updates(conn, data)
 
 def collect_index_value(file, time=time.time()):
     """
@@ -153,6 +153,7 @@ def compose_index(conn, value, date1, date2):
             stk["weight"] = pps / stk["price"]
             composition.append(stk)
             ids.append(stk["id"])
+    print(composition)
     return composition
 
 def update(conn, data):
