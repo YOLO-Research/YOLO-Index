@@ -6,7 +6,7 @@ import sqlite3, time
 from sqlite3 import Error
 
 def collect_index(file, 
-    t1=(time.time() - (time.time() % 3600) - 604800), t2=(time.time() - (time.time() % 3600))):
+    t1=(time.time() - (time.time() % 3600) - 604800), t2=(time.time())):
     """
     Compose the index and set weights in the SQLite DB
     
