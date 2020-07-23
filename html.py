@@ -26,8 +26,10 @@ def generate_template(db_file, tim=time.time()):
         labels.append(1000 * v[0])
         data.append(round(v[1], 2))
 
-    day_change = (values[-1][1] - values[0][1], 100*(values[-1][1] - values[0][1]) / values[0][1])
-    day_change = ('%+.2f' % day_change[0], '%+.2f' % day_change[1]) 
+    day_change = ("0.00", "0.00")
+    if len(values) > 0:
+        day_change = (values[-1][1] - values[0][1], 100*(values[-1][1] - values[0][1]) / values[0][1])
+        day_change = ('%+.2f' % day_change[0], '%+.2f' % day_change[1]) 
 
     index_1 = index.get_composition(conn, tim1)
     index_2 = index.get_composition(conn, tim2)
