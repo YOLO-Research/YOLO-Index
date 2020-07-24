@@ -44,7 +44,7 @@ def update_weights(file, date=time.time()):
     :type time: integer
     """
     conn = sqlite.create_connection(file)
-    comp = get_composition(conn, date - ((date - 14400) % 86400))
+    comp = get_composition(conn, date - ((date - 14400) % 86400) + 9*3600)
     for c in comp:
         c["tim"] = date
     updates(conn, comp)
