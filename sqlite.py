@@ -3,6 +3,9 @@ from robin_stocks import stocks
 from sqlite3 import Error
 
 def execute(conn, query, params=None):
+    """
+    Execute an SQLite Query
+    """
     res = None
     with conn:
         try:
@@ -30,18 +33,20 @@ def create_table(conn):
     """
     Create a database table 
     """
-
-    sql_create_table = """ CREATE TABLE IF NOT EXISTS 'index_data' (
-                             id integer NOT NULL,
-                             tim timestamp NOT NULL,
-                             popularity int NOT NULL,
-                             price float NOT NULL,
-                             weight float NOT NULL
+    sql_create_table = """ CREATE TABLE IF NOT EXISTS 'stock_data' (
+                             id INTEGER PRIMARY KEY AUTOINCREMENT,
+                             uid VARCHAR(255) NOT NULL,
+                             tim TIMESTAMP NOT NULL,
+                             popularity INTEGER NOT NULL,
+                             price FLOAT NOT NULL,
+                             weight FLOAT DEFAULT NULL,
+                             comp_id INTEGER DEFAUL NULL
                         ); 
                         """
-    sql_create_value_table = """ CREATE TABLE IF NOT EXISTS 'index_value' (
-                             tim timestamp NOT NULL,
-                             value float NOT NULL
+    sql_create_comp_table = """ CREATE TABLE IF NOT EXISTS 'compositions' (
+                             id INTEGER PRIMARY KEY AUTOINCREMENT,
+                             tim TIMESTAMP NOT NULL,
+                             value FLOAT NOT NULL
                         ); 
                         """
 
@@ -49,7 +54,7 @@ def create_table(conn):
         try:
             c = conn.cursor()
             c.execute(sql_create_table)
-            c.execute(sql_create_value_table)
+            c.execute(sql_create_comp_table)
         except Error as e:
             print(e)
 

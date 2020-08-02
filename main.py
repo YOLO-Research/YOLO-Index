@@ -5,7 +5,7 @@ import sqlite, index, html
 # system packages
 import json, time, sys, os, time
 
-db_file = 'data.sqlite'
+db_file = 'db.sq3'
 
 def init(db):
     sqlite.create_table(sqlite.create_connection(db))
@@ -106,6 +106,31 @@ def process_queue(file, queue):
     with sqlite.create_connection(file) as conn:
         sqlite.index_insert_many(conn, results)
 
+def convert(conn):
+    """
+    Convert old tables to a new relational format
+    """
+    sqlite.create_table(conn)
+
+    query = """ INSERT INTO stock_data (uid, tim, popularity, price, weight) 
+                SELECT id, tim, popularity, price, weight FROM index_data;
+            """
+    sqlite.execute(conn, query)
+
+    query = """ INSERT INTO compositions (tim, value) 
+                SELECT tim, value FROM index_value;
+            """
+
+    sqlite.execute(conn, query)
+
+def comp_ids(conn):
+    query = "SELECT id, tim FROM compositions"
+    comps = sqlite.execute(conn, query)
+    for c in comps:
+        tm = c[1] - c[1] % 3600
+        query = "UPDATE stock_data SET comp_id = ? WHERE tim >= ? AND tim < ?;"
+        sqlite.execute(conn, query, (c[0], tm, tm + 3600))
+
 ######################################
 
 def main():
@@ -151,6 +176,9 @@ def main():
         print("Generated HTML.")
 
     ######## TEST CODE ########
+
+    convert(sqlite.create_connection(db_file))
+    comp_ids(sqlite.create_connection(db_file))
 
     ######## PUT CODE ABOVE ########
     
